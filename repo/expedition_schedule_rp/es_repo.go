@@ -1,0 +1,75 @@
+package expedition_schedule_rp
+
+import (
+	"bitbucket.org/service-ekspedisi/models"
+	"bitbucket.org/service-ekspedisi/repo"
+	"gorm.io/gorm"
+)
+
+type ExpeditionRepoStruct struct {
+	db *gorm.DB
+}
+
+func NewExpeditionRepo(db *gorm.DB) repo.ExpeditionRepoInterface {
+	return &ExpeditionRepoStruct{db: db}
+}
+
+func (e ExpeditionRepoStruct) AddEs(v models.ExpeditionSchedule) (models.ExpeditionSchedule, error) {
+	tx := e.db.Begin()
+	err := e.db.Debug().Create(&v).Error
+	if err != nil {
+		tx.Rollback()
+		return models.ExpeditionSchedule{}, err
+	}
+
+	tx.Commit()
+	return v, err
+}
+
+func (e ExpeditionRepoStruct) GetById(id int) (models.ExpeditionSchedule, error) {
+	var v models.ExpeditionSchedule
+	err := e.db.Debug().First(&v, id).Error
+	if err != nil {
+		return models.ExpeditionSchedule{}, err
+	}
+
+	return v, err
+}
+
+func (e ExpeditionRepoStruct) GetAll() ([]models.ExpeditionSchedule, error) {
+	var v []models.ExpeditionSchedule
+	err := e.db.Debug().Find(&v).Error
+	if err != nil {
+		return []models.ExpeditionSchedule{}, err
+	}
+
+	return v, err
+
+}
+
+func (e ExpeditionRepoStruct) Update(id int, v models.ExpeditionSchedule) (models.ExpeditionSchedule, error) {
+	tx := e.db.Begin()
+	err := e.db.Debug().Model(&models.ExpeditionSchedule{}).Where("id = ?", id).Updates(v).Error
+	if err != nil {
+		tx.Rollback()
+		return models.ExpeditionSchedule{}, err
+	}
+
+	tx.Commit()
+	return v, err
+}
+
+func (e ExpeditionRepoStruct) DeleteData(id []string) error {
+	var v models.ExpeditionSchedule
+
+	tx := e.db.Begin()
+	err := e.db.Debug().Model(&models.ExpeditionSchedule{}).Where("id in (?)", id).Delete(&v).Error
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	tx.Commit()
+	return err
+
+}
