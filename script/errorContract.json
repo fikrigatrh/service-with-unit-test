@@ -1,0 +1,10 @@
+{
+  "400XX00": {"var": "ErrBadRequest", "msg": "Bad Request"},
+  "400XX01": {"var": "ErrInvalidFieldFormat", "msg": "Invalid Field Format %s"},
+  "400XX02": {"var": "ErrInvalidFieldMandatory", "msg": "Invalid Mandatory Field %s"},
+  "400XX010": {"var": "ErrInvalidFieldFormatHeader", "msg": "Invalid Field Format %s"},
+  "400XX020": {"var": "ErrInvalidFieldMandatoryHeader", "msg": "Invalid Mandatory Field %s"},
+  "401XX00": {"var": "ErrUnauthorized","msg": "Unauthorized"},
+  "409XX00": {"var": "ErrConflict", "msg": "Conflict"},
+  "500XX00": {"var": "ErrGeneralError", "msg": "General Error"}
+}
