@@ -10,7 +10,7 @@ type AboutUsUsecaseStruct struct {
 	repo repo.AboutUsRepoInterface
 }
 
-func NewAboutUsUsecase(repo repo.AboutUsRepoInterface) usecase.AboutUsRepoInterface {
+func NewAboutUsUsecase(repo repo.AboutUsRepoInterface) usecase.AboutUsUcInterface {
 	return &AboutUsUsecaseStruct{
 		repo: repo,
 	}

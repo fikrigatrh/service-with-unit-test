@@ -6,10 +6,10 @@ import (
 )
 
 type AboutUsController struct {
-	uc usecase.AboutUsRepoInterface
+	uc usecase.AboutUsUcInterface
 }
 
-func NewAboutUsController(r *gin.RouterGroup, uc usecase.AboutUsRepoInterface) {
+func NewAboutUsController(r *gin.RouterGroup, uc usecase.AboutUsUcInterface) {
 	handler := &AboutUsController{
 		uc: uc,
 	}
