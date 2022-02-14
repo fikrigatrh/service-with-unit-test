@@ -17,3 +17,11 @@ type ExpeditionUcInterface interface {
 	Update(id int, v models.ExpeditionSchedule) (models.ExpeditionSchedule, error)
 	DeleteData(id []string) error
 }
+
+type UserUcInterface interface {
+	AddUser(v models.User) (models.User, error)
+	GetAll() ([]models.User, error)
+	GetById(id int) (models.User, error)
+	UpdateData(id int, v models.User) (models.User, error)
+	DeleteData(id []string) error
+}
