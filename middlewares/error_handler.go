@@ -29,7 +29,7 @@ func (eh *ErrorHandler) errorHandler(c *gin.Context) {
 		_, v := eh.ErrorHandlerUsecase.ResponseError(errorToPrint)
 		s := v.(models.ResponseCustomErr)
 		c.JSON(eh.ErrorHandlerUsecase.ResponseError(errorToPrint))
-		eh.log.Error(errorToPrint, "middlewares/errorHandler", "", nil, nil, s, nil, nil)
+		eh.log.Error(errorToPrint, "middlewares/errorHandler", "", nil, nil, s)
 		c.Abort()
 		return
 	}
