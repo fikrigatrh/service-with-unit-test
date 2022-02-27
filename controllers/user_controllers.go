@@ -25,14 +25,13 @@ func NewUserController(r *gin.RouterGroup, uc usecase.UserUcInterface) {
 	r.DELETE("/delete-user", handler.DeleteUser)
 }
 
-
 func (a UserController) AddUser(c *gin.Context) {
 	user := models.User{}
 
 	err := c.ShouldBindJSON(&user)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"responseCode": "1111",
+			"responseCode":    "1111",
 			"responseMessage": "Something error",
 		})
 		return
@@ -40,15 +39,15 @@ func (a UserController) AddUser(c *gin.Context) {
 
 	_, err = a.uc.AddUser(user)
 	if err != nil {
-		c.JSON(http.StatusBadRequest,gin.H{
-			"responseCode": "1111",
+		c.JSON(http.StatusBadRequest, gin.H{
+			"responseCode":    "1111",
 			"responseMessage": err,
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"responseCode": "0000",
+		"responseCode":    "0000",
 		"responseMessage": "Registered successfully",
 	})
 }
@@ -57,18 +56,14 @@ func (a UserController) GetAllUser(c *gin.Context) {
 
 	allDataUser, err := a.uc.GetAll()
 	if err != nil {
-		c.JSON(http.StatusBadRequest,gin.H{
-			"responseCode": "1111",
+		c.JSON(http.StatusBadRequest, gin.H{
+			"responseCode":    "1111",
 			"responseMessage": err,
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"responseCode": "0000",
-		"responseMessage": "Success",
-		"data" : allDataUser,
-	})
+	responseSuccess(allDataUser)
 }
 
 func (a UserController) GetUserByID(c *gin.Context) {
@@ -76,38 +71,30 @@ func (a UserController) GetUserByID(c *gin.Context) {
 
 	data, err := a.uc.GetById(id)
 	if err != nil {
-		c.JSON(http.StatusBadRequest,gin.H{
-			"responseCode": "1111",
+		c.JSON(http.StatusBadRequest, gin.H{
+			"responseCode":    "1111",
 			"responseMessage": err,
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"responseCode": "0000",
-		"responseMessage": "Success",
-		"data" : data,
-	})
+	responseSuccess(data)
 }
 
 func (a UserController) UpdateUser(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	user := models.User{}
 	err := c.ShouldBindJSON(&user)
-	data, err := a.uc.UpdateData(id,user)
+	data, err := a.uc.UpdateData(id, user)
 	if err != nil {
-		c.JSON(http.StatusBadRequest,gin.H{
-			"responseCode": "1111",
+		c.JSON(http.StatusBadRequest, gin.H{
+			"responseCode":    "1111",
 			"responseMessage": err,
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"responseCode": "0000",
-		"responseMessage": "Success",
-		"data" : data,
-	})
+	responseSuccess(data)
 }
 
 func (a UserController) DeleteUser(c *gin.Context) {
@@ -117,15 +104,15 @@ func (a UserController) DeleteUser(c *gin.Context) {
 
 	err := a.uc.DeleteData(idRes)
 	if err != nil {
-		c.JSON(http.StatusBadRequest,gin.H{
-			"responseCode": "1111",
+		c.JSON(http.StatusBadRequest, gin.H{
+			"responseCode":    "1111",
 			"responseMessage": err,
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"responseCode": "0000",
+		"responseCode":    "0000",
 		"responseMessage": "Successfully deleted",
 	})
 }
