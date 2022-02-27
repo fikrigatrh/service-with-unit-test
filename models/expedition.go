@@ -4,11 +4,11 @@ import "gorm.io/gorm"
 
 type ExpeditionSchedule struct {
 	gorm.Model
-	Vessel  string `json:"vessel"`
-	Route   string `json:"route"`
-	Etd     string `json:"etd"`
-	Eta     string `json:"eta"`
-	Closing string `json:"closing"`
+	Vessel  string `json:"vessel" validate:"required"`
+	Route   string `json:"route" validate:"required"`
+	Etd     string `json:"etd" validate:"required"`
+	Eta     string `json:"eta" validate:"required"`
+	Closing string `json:"closing" validate:"required"`
 }
 
 type PriceList struct {

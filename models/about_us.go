@@ -9,16 +9,16 @@ type SocialMediaDetail struct {
 }
 
 type AboutUsRequest struct {
-	Profil            string                    `json:"profil"`
-	Visi              string                    `json:"visi"`
-	Misi              []MisiDetail              `json:"misi"`
-	Motto             string                    `json:"motto"`
+	Profil            string                    `json:"profil" validate:"required"`
+	Visi              string                    `json:"visi" validate:"required"`
+	Misi              []MisiDetail              `json:"misi" validate:"required"`
+	Motto             string                    `json:"motto" validate:"required"`
 	PerusahaanRekanan []PerusahaanRekananDetail `json:"perusahaan_rekanan"`
-	Office            string                    `json:"office"`
+	Office            string                    `json:"office" validate:"required"`
 	Warehouse         string                    `json:"warehouse"`
-	Email             string                    `json:"email"`
-	NoTelp            string                    `json:"no_telp"`
-	SocialMedia       []SocialMediaDetail       `json:"social_media"`
+	Email             string                    `json:"email" validate:"required"`
+	NoTelp            string                    `json:"no_telp" validate:"required"`
+	SocialMedia       []SocialMediaDetail       `json:"social_media" validate:"required"`
 }
 
 type Footer struct {
