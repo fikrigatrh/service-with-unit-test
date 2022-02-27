@@ -16,6 +16,7 @@ type ExpeditionUcInterface interface {
 	GetAll() ([]models.ExpeditionSchedule, error)
 	Update(id int, v models.ExpeditionSchedule) (models.ExpeditionSchedule, error)
 	DeleteData(id []string) error
+	GetByRoute(route string) ([]models.ExpeditionSchedule, error)
 }
 
 type UserUcInterface interface {

@@ -5,6 +5,8 @@ import (
 	"bitbucket.org/service-ekspedisi/models"
 	"bitbucket.org/service-ekspedisi/repo"
 	"bitbucket.org/service-ekspedisi/usecase"
+	"strconv"
+	"strings"
 )
 
 type EsUcStruct struct {
@@ -20,13 +22,22 @@ func NewEsUc(repo repo.ExpeditionRepoInterface, log *log.LogCustom) usecase.Expe
 }
 
 func (e EsUcStruct) AddEs(v models.ExpeditionSchedule) (models.ExpeditionSchedule, error) {
-	//TODO implement me
-	panic("implement me")
+	v.Route = strings.ToUpper(v.Route)
+	es, err := e.repo.AddEs(v)
+	if err != nil {
+		return models.ExpeditionSchedule{}, err
+	}
+
+	return es, nil
 }
 
 func (e EsUcStruct) GetById(id int) (models.ExpeditionSchedule, error) {
-	//TODO implement me
-	panic("implement me")
+	es, err := e.repo.GetById(id)
+	if err != nil {
+		return models.ExpeditionSchedule{}, err
+	}
+
+	return es, nil
 }
 
 func (e EsUcStruct) GetAll() ([]models.ExpeditionSchedule, error) {
@@ -40,6 +51,28 @@ func (e EsUcStruct) Update(id int, v models.ExpeditionSchedule) (models.Expediti
 }
 
 func (e EsUcStruct) DeleteData(id []string) error {
-	//TODO implement me
-	panic("implement me")
+	for _, s := range id {
+		idRes, _ := strconv.Atoi(s)
+		_, err := e.repo.GetById(idRes)
+		if err != nil {
+			e.log.Error(err, "usecase error when get data by id", "", nil, idRes, nil)
+			return err
+		}
+	}
+
+	err := e.repo.DeleteData(id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (e EsUcStruct) GetByRoute(route string) ([]models.ExpeditionSchedule, error) {
+	es, err := e.repo.GetByRoute(route)
+	if err != nil {
+		return []models.ExpeditionSchedule{}, err
+	}
+
+	return es, nil
 }

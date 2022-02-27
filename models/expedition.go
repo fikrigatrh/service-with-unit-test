@@ -1,6 +1,9 @@
 package models
 
+import "gorm.io/gorm"
+
 type ExpeditionSchedule struct {
+	gorm.Model
 	Vessel  string `json:"vessel"`
 	Route   string `json:"route"`
 	Etd     string `json:"etd"`
