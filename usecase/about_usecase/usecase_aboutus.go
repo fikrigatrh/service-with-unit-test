@@ -37,12 +37,20 @@ func (a AboutUsUsecaseStruct) AddAbout(req models.AboutUsRequest) (models.AboutU
 
 	resPerusahaan := string(perusahaanArr)
 
+	sosmedArr, err := json.Marshal(req.SocialMedia)
+	if err != nil {
+		return models.AboutUsRequest{}, err
+	}
+
+	resSosmed := string(sosmedArr)
+
 	v := models.AboutUsDb{
 		Profil:            req.Profil,
 		Visi:              req.Visi,
 		Misi:              resMisi,
 		Motto:             req.Motto,
 		PerusahaanRekanan: resPerusahaan,
+		SocialMedia:       resSosmed,
 	}
 
 	about, err := a.repo.AddAbout(v)
@@ -57,6 +65,11 @@ func (a AboutUsUsecaseStruct) AddAbout(req models.AboutUsRequest) (models.AboutU
 	}
 
 	err = json.Unmarshal([]byte(about.PerusahaanRekanan), &result.PerusahaanRekanan)
+	if err != nil {
+		return models.AboutUsRequest{}, err
+	}
+
+	err = json.Unmarshal([]byte(about.SocialMedia), &result.SocialMedia)
 	if err != nil {
 		return models.AboutUsRequest{}, err
 	}
