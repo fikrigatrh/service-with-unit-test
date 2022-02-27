@@ -2,6 +2,12 @@ package models
 
 import "gorm.io/gorm"
 
+type SocialMediaDetail struct {
+	Instagram string `json:"instagram"`
+	Facebook  string `json:"facebook"`
+	Twitter   string `json:"twitter"`
+}
+
 type AboutUsRequest struct {
 	Profil            string                    `json:"profil"`
 	Visi              string                    `json:"visi"`
@@ -10,6 +16,9 @@ type AboutUsRequest struct {
 	PerusahaanRekanan []PerusahaanRekananDetail `json:"perusahaan_rekanan"`
 	Office            string                    `json:"office"`
 	Warehouse         string                    `json:"warehouse"`
+	Email             string                    `json:"email"`
+	NoTelp            string                    `json:"no_telp"`
+	SocialMedia       []SocialMediaDetail       `json:"social_media"`
 }
 
 type Footer struct {
@@ -47,6 +56,9 @@ type AboutUsDb struct {
 	Misi              string `json:"misi" gorm:"type:JSONB NULL DEFAULT '{}'::JSONB"`
 	Motto             string `json:"motto"`
 	PerusahaanRekanan string `json:"perusahaan_rekanan" gorm:"type:JSONB NULL DEFAULT '{}'::JSONB"`
+	SocialMedia       string `json:"social_media" gorm:"type:JSONB NULL DEFAULT '{}'::JSONB"`
+	Email             string `json:"email"`
+	NoTelp            string `json:"no_telp"`
 }
 
 type PerusahaanRekananDetail struct {
