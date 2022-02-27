@@ -25,3 +25,7 @@ type UserUcInterface interface {
 	UpdateData(id int, v models.User) (models.User, error)
 	DeleteData(id []string) error
 }
+
+type LoginUcInterface interface {
+	LoginUser(encrpytData models.EncryptData) (models.TokenStruct, error)
+}

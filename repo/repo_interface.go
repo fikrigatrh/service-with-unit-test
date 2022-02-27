@@ -25,3 +25,9 @@ type UserRepoInterface interface {
 	UpdateData(id int, v models.User) (models.User, error)
 	DeleteData(id []string) error
 }
+
+type LoginRepoInterface interface {
+	LoginUser(email string) (models.User, error)
+	CreateAuth(authFix models.Auth) (models.Auth, error)
+}
+

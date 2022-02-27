@@ -15,7 +15,8 @@ func CreateToken(authD models.Auth) (string, error) {
 	claims["authorized"] = true
 	claims["auth_uuid"] = authD.AuthUUID
 	claims["username"] = authD.Username
-	claims["user_id"] = authD.UserID
+	claims["email"] = authD.Email
+	claims["role"] = authD.Role
 	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString([]byte(os.Getenv("SECRET")))
@@ -81,7 +82,7 @@ func ExtractTokenAuth(r *http.Request) (*models.Auth, error) {
 			return nil, err
 		}
 		fmt.Println(username, ">>>>>>>>>>>")
-		userId, done := claims["user_id"].(string)
+		email, done := claims["email"].(string)
 		//userIdRes, err := strconv.Atoi(userId)
 		//if err != nil {
 		//	return nil, err
@@ -92,7 +93,7 @@ func ExtractTokenAuth(r *http.Request) (*models.Auth, error) {
 
 		res.AuthUUID = authUuid
 		res.Username = username
-		res.UserID = userId
+		res.Email = email
 		return &res, nil
 
 	}

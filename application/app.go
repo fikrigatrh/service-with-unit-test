@@ -5,7 +5,9 @@ import (
 	"bitbucket.org/service-ekspedisi/config/env"
 	"bitbucket.org/service-ekspedisi/controllers"
 	"bitbucket.org/service-ekspedisi/models"
+	"bitbucket.org/service-ekspedisi/repo/login_repo"
 	"bitbucket.org/service-ekspedisi/repo/user_repo"
+	"bitbucket.org/service-ekspedisi/usecase/login_usecase"
 	"bitbucket.org/service-ekspedisi/usecase/user_usecase"
 	"fmt"
 	"github.com/Saucon/errcntrct"
@@ -34,9 +36,11 @@ func StartApp() {
 
 	// repository
 	repoUser := user_repo.NewUserRepo(dbBase.DB)
+	repoLogin := login_repo.NewLoginRepo(dbBase.DB)
 
 	//usecase
 	ucUser :=  user_usecase.NewUserUsecase(repoUser)
+	ucLogin := login_usecase.NewLoginUsecase(repoLogin)
 
 	newRoute := router.Group("api/v1")
 
@@ -44,6 +48,7 @@ func StartApp() {
 
 	// controller
 	controllers.NewUserController(newRoute,ucUser)
+	controllers.NewLoginController(newRoute,ucLogin)
 
 	if err := router.Run(env.Config.ServiceHost + ":" + env.Config.Port); err != nil {
 		log.Fatal("error starting server", err)

@@ -4,6 +4,7 @@ import (
 	"bitbucket.org/service-ekspedisi/models"
 	"bitbucket.org/service-ekspedisi/repo"
 	"gorm.io/gorm"
+	"time"
 )
 
 type UserRepoStruct struct {
@@ -28,7 +29,7 @@ func (a UserRepoStruct) AddUser(v models.User) (models.User, error) {
 
 func (a UserRepoStruct) GetAll() ([]models.User, error) {
 	var v []models.User
-	err := a.db.Debug().Find(&v).Error
+	err := a.db.Debug().Where("status = active").Find(&v).Error
 	if err != nil {
 		return nil, err
 	}
@@ -37,7 +38,7 @@ func (a UserRepoStruct) GetAll() ([]models.User, error) {
 
 func (a UserRepoStruct) GetById(id int) (models.User, error) {
 	var v models.User
-	err := a.db.Debug().Where("id = ?", id).First(&v).Error
+	err := a.db.Debug().Where("id = ? and status = active", id).First(&v).Error
 	if err != nil {
 		return models.User{}, err
 	}
@@ -58,10 +59,10 @@ func (a UserRepoStruct) UpdateData(id int, v models.User) (models.User, error) {
 }
 
 func (a UserRepoStruct) DeleteData(id []string) error {
-	v := models.User{}
+	currentTime := time.Now()
 
 	tx := a.db.Begin()
-	err := a.db.Debug().Where("id in (?)", id).Delete(&v).Error
+	err := a.db.Debug().Model(&models.User{}).Where("id in (?)", id).Updates(map[string]interface{}{"status": "inactive", "deleted_at": currentTime.Format("2006-01-02 15:04:05")}).Error
 	if err != nil {
 		tx.Rollback()
 		return err
