@@ -37,3 +37,11 @@ type Booking struct {
 	Kubikasi                 string `json:"kubikasi"`
 	Keterangan               string `json:"keterangan"`
 }
+
+type AboutUsDb struct {
+	gorm.Model
+	Profil string `json:"profil"`
+	Visi   string `json:"visi"`
+	Misi   string `json:"misi" gorm:"type:JSONB NULL DEFAULT '{}'::JSONB"`
+	Motto  string `json:"motto"`
+}

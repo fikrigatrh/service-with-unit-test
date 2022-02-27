@@ -5,6 +5,7 @@ import (
 	"bitbucket.org/service-ekspedisi/models"
 	"bitbucket.org/service-ekspedisi/repo"
 	"bitbucket.org/service-ekspedisi/usecase"
+	"encoding/json"
 	"strconv"
 )
 
@@ -20,10 +21,25 @@ func NewAboutUsUsecase(repo repo.AboutUsRepoInterface, log *log.LogCustom) useca
 	}
 }
 
-func (a AboutUsUsecaseStruct) AddAbout(v models.AboutUsRequest) (models.AboutUsRequest, error) {
+func (a AboutUsUsecaseStruct) AddAbout(req models.AboutUsRequest) (models.AboutUsDb, error) {
+
+	misiArr, err := json.Marshal(req.Visi)
+	if err != nil {
+		return models.AboutUsDb{}, err
+	}
+
+	resMisi := string(misiArr)
+
+	v := models.AboutUsDb{
+		Profil: req.Profil,
+		Visi:   req.Visi,
+		Misi:   resMisi,
+		Motto:  req.Motto,
+	}
+
 	about, err := a.repo.AddAbout(v)
 	if err != nil {
-		return models.AboutUsRequest{}, err
+		return models.AboutUsDb{}, err
 	}
 
 	return about, nil

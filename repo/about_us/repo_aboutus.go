@@ -18,12 +18,12 @@ func NewAboutUsRepo(db *gorm.DB, log *log.LogCustom) repo.AboutUsRepoInterface {
 	return &AboutUsRepoStruct{db, log}
 }
 
-func (a AboutUsRepoStruct) AddAbout(v models.AboutUsRequest) (models.AboutUsRequest, error) {
+func (a AboutUsRepoStruct) AddAbout(v models.AboutUsDb) (models.AboutUsDb, error) {
 	tx := a.db.Begin()
 	err := a.db.Debug().Create(&v).Error
 	if err != nil {
 		tx.Rollback()
-		return models.AboutUsRequest{}, errors.New(contract.ErrCannotSaveToDB)
+		return models.AboutUsDb{}, errors.New(contract.ErrCannotSaveToDB)
 	}
 
 	tx.Commit()

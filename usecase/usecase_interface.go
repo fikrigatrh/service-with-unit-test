@@ -3,7 +3,7 @@ package usecase
 import "bitbucket.org/service-ekspedisi/models"
 
 type AboutUsUcInterface interface {
-	AddAbout(v models.AboutUsRequest) (models.AboutUsRequest, error)
+	AddAbout(v models.AboutUsRequest) (models.AboutUsDb, error)
 	GetAll() ([]models.AboutUsRequest, error)
 	GetById(id int) (models.AboutUsRequest, error)
 	UpdateData(id int, v models.AboutUsRequest) (models.AboutUsRequest, error)
