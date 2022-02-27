@@ -21,28 +21,51 @@ func NewAboutUsUsecase(repo repo.AboutUsRepoInterface, log *log.LogCustom) useca
 	}
 }
 
-func (a AboutUsUsecaseStruct) AddAbout(req models.AboutUsRequest) (models.AboutUsDb, error) {
+func (a AboutUsUsecaseStruct) AddAbout(req models.AboutUsRequest) (models.AboutUsRequest, error) {
 
-	misiArr, err := json.Marshal(req.Visi)
+	misiArr, err := json.Marshal(req.Misi)
 	if err != nil {
-		return models.AboutUsDb{}, err
+		return models.AboutUsRequest{}, err
 	}
 
 	resMisi := string(misiArr)
 
+	perusahaanArr, err := json.Marshal(req.PerusahaanRekanan)
+	if err != nil {
+		return models.AboutUsRequest{}, err
+	}
+
+	resPerusahaan := string(perusahaanArr)
+
 	v := models.AboutUsDb{
-		Profil: req.Profil,
-		Visi:   req.Visi,
-		Misi:   resMisi,
-		Motto:  req.Motto,
+		Profil:            req.Profil,
+		Visi:              req.Visi,
+		Misi:              resMisi,
+		Motto:             req.Motto,
+		PerusahaanRekanan: resPerusahaan,
 	}
 
 	about, err := a.repo.AddAbout(v)
 	if err != nil {
-		return models.AboutUsDb{}, err
+		return models.AboutUsRequest{}, err
 	}
 
-	return about, nil
+	var result models.AboutUsRequest
+	err = json.Unmarshal([]byte(about.Misi), &result.Misi)
+	if err != nil {
+		return models.AboutUsRequest{}, err
+	}
+
+	err = json.Unmarshal([]byte(about.PerusahaanRekanan), &result.PerusahaanRekanan)
+	if err != nil {
+		return models.AboutUsRequest{}, err
+	}
+
+	result.Profil = about.Profil
+	result.Motto = about.Motto
+	result.Visi = about.Visi
+
+	return result, nil
 }
 
 func (a AboutUsUsecaseStruct) GetAll() ([]models.AboutUsRequest, error) {

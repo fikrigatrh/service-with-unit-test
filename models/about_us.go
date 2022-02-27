@@ -3,11 +3,11 @@ package models
 import "gorm.io/gorm"
 
 type AboutUsRequest struct {
-	gorm.Model
-	Profil string       `json:"profil"`
-	Visi   string       `json:"visi"`
-	Misi   []MisiDetail `json:"misi"`
-	Motto  string       `json:"motto"`
+	Profil            string                    `json:"profil"`
+	Visi              string                    `json:"visi"`
+	Misi              []MisiDetail              `json:"misi"`
+	Motto             string                    `json:"motto"`
+	PerusahaanRekanan []PerusahaanRekananDetail `json:"perusahaan_rekanan"`
 }
 
 type Footer struct {
@@ -40,8 +40,13 @@ type Booking struct {
 
 type AboutUsDb struct {
 	gorm.Model
-	Profil string `json:"profil"`
-	Visi   string `json:"visi"`
-	Misi   string `json:"misi" gorm:"type:JSONB NULL DEFAULT '{}'::JSONB"`
-	Motto  string `json:"motto"`
+	Profil            string `json:"profil"`
+	Visi              string `json:"visi"`
+	Misi              string `json:"misi" gorm:"type:JSONB NULL DEFAULT '{}'::JSONB"`
+	Motto             string `json:"motto"`
+	PerusahaanRekanan string `json:"perusahaan_rekanan" gorm:"type:JSONB NULL DEFAULT '{}'::JSONB"`
+}
+
+type PerusahaanRekananDetail struct {
+	NamaPerusahaan string `json:"nama_perusahaan"`
 }

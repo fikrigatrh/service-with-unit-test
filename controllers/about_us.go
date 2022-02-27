@@ -42,7 +42,7 @@ func (a AboutUsController) GetAllAboutUs(c *gin.Context) {
 		return
 	}
 
-	responseSuccess(aboutUsList)
+	responseSuccess(c, aboutUsList)
 }
 
 func (a AboutUsController) AddAboutUs(c *gin.Context) {
@@ -75,7 +75,7 @@ func (a AboutUsController) AddAboutUs(c *gin.Context) {
 		return
 	}
 
-	responseSuccess(about)
+	responseSuccess(c, about)
 }
 
 func (a AboutUsController) UpdateAboutUs(c *gin.Context) {
@@ -94,7 +94,7 @@ func (a AboutUsController) DeleteAboutUs(c *gin.Context) {
 		return
 	}
 
-	responseSuccess(nil)
+	responseSuccess(c, nil)
 }
 
 func (a AboutUsController) GetAboutUsById(c *gin.Context) {
@@ -116,13 +116,16 @@ func (a AboutUsController) GetAboutUsById(c *gin.Context) {
 		return
 	}
 
-	responseSuccess(result)
+	responseSuccess(c, result)
 }
 
-func responseSuccess(data interface{}) gin.H {
-	return gin.H{
-		"responseCode":    "0000",
-		"responseMessage": "Success",
-		"data":            data,
+func responseSuccess(c *gin.Context, data interface{}) *gin.Context {
+	res := models.ResponseSuccess{
+		ResponseCode:    "0000",
+		ResponseMessage: "success",
+		Data:            data,
 	}
+	c.JSON(200, res)
+
+	return c
 }

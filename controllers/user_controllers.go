@@ -63,7 +63,7 @@ func (a UserController) GetAllUser(c *gin.Context) {
 		return
 	}
 
-	responseSuccess(allDataUser)
+	responseSuccess(c, allDataUser)
 }
 
 func (a UserController) GetUserByID(c *gin.Context) {
@@ -78,7 +78,7 @@ func (a UserController) GetUserByID(c *gin.Context) {
 		return
 	}
 
-	responseSuccess(data)
+	responseSuccess(c, data)
 }
 
 func (a UserController) UpdateUser(c *gin.Context) {
@@ -94,7 +94,7 @@ func (a UserController) UpdateUser(c *gin.Context) {
 		return
 	}
 
-	responseSuccess(data)
+	responseSuccess(c, data)
 }
 
 func (a UserController) DeleteUser(c *gin.Context) {

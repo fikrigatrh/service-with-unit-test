@@ -60,3 +60,9 @@ type ErrMeta struct {
 const (
 	ServiceCode = "10"
 )
+
+type ResponseSuccess struct {
+	ResponseCode    string      `json:"responseCode"`
+	ResponseMessage string      `json:"responseMessage"`
+	Data            interface{} `json:"data"`
+}
