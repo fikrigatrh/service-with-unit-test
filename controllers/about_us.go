@@ -32,7 +32,7 @@ func NewAboutUsController(r *gin.RouterGroup, uc usecase.AboutUsUcInterface, err
 }
 
 func (a AboutUsController) GetAllAboutUs(c *gin.Context) {
-	var aboutUsList []models.AboutUs
+	var aboutUsList []models.AboutUsRequest
 
 	aboutUsList, err := a.uc.GetAll()
 	if err != nil {
@@ -46,7 +46,7 @@ func (a AboutUsController) GetAllAboutUs(c *gin.Context) {
 }
 
 func (a AboutUsController) AddAboutUs(c *gin.Context) {
-	var req models.AboutUs
+	var req models.AboutUsRequest
 
 	err := c.ShouldBindJSON(&req)
 	if err != nil {

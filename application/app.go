@@ -65,7 +65,7 @@ func StartApp() {
 	controllers.NewAboutUsController(newRoute, abtUc, errorUc, logCustom)
 	controllers.NewExpeditionController(newRoute, esUc, errorUc, logCustom)
 
-	if err := router.Run(env.Config.ServiceHost + ":" + env.Config.Port); err != nil {
+	if err := router.Run(env.Config.Host + ":" + env.Config.Port); err != nil {
 		log.Fatal("error starting server", err)
 	}
 }

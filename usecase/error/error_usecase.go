@@ -112,7 +112,7 @@ func (e errorHandlerUsecase) ValidateRequest(T interface{}) (string, error) {
 		}
 
 		return "", nil
-	case models.AboutUs:
+	case models.AboutUsRequest:
 		err := v.Struct(T)
 		if err == nil {
 			return "", nil

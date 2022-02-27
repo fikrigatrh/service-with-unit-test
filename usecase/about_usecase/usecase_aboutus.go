@@ -20,37 +20,37 @@ func NewAboutUsUsecase(repo repo.AboutUsRepoInterface, log *log.LogCustom) useca
 	}
 }
 
-func (a AboutUsUsecaseStruct) AddAbout(v models.AboutUs) (models.AboutUs, error) {
+func (a AboutUsUsecaseStruct) AddAbout(v models.AboutUsRequest) (models.AboutUsRequest, error) {
 	about, err := a.repo.AddAbout(v)
 	if err != nil {
-		return models.AboutUs{}, err
+		return models.AboutUsRequest{}, err
 	}
 
 	return about, nil
 }
 
-func (a AboutUsUsecaseStruct) GetAll() ([]models.AboutUs, error) {
+func (a AboutUsUsecaseStruct) GetAll() ([]models.AboutUsRequest, error) {
 	about, err := a.repo.GetAll()
 	if err != nil {
-		return []models.AboutUs{}, err
+		return []models.AboutUsRequest{}, err
 	}
 
 	return about, nil
 }
 
-func (a AboutUsUsecaseStruct) GetById(id int) (models.AboutUs, error) {
+func (a AboutUsUsecaseStruct) GetById(id int) (models.AboutUsRequest, error) {
 	about, err := a.repo.GetById(id)
 	if err != nil {
-		return models.AboutUs{}, err
+		return models.AboutUsRequest{}, err
 	}
 
 	return about, nil
 }
 
-func (a AboutUsUsecaseStruct) UpdateData(id int, v models.AboutUs) (models.AboutUs, error) {
+func (a AboutUsUsecaseStruct) UpdateData(id int, v models.AboutUsRequest) (models.AboutUsRequest, error) {
 	about, err := a.repo.UpdateData(id, v)
 	if err != nil {
-		return models.AboutUs{}, err
+		return models.AboutUsRequest{}, err
 	}
 
 	return about, nil

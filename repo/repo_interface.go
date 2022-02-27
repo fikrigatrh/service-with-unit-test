@@ -3,10 +3,10 @@ package repo
 import "bitbucket.org/service-ekspedisi/models"
 
 type AboutUsRepoInterface interface {
-	AddAbout(v models.AboutUs) (models.AboutUs, error)
-	GetAll() ([]models.AboutUs, error)
-	GetById(id int) (models.AboutUs, error)
-	UpdateData(id int, v models.AboutUs) (models.AboutUs, error)
+	AddAbout(v models.AboutUsRequest) (models.AboutUsRequest, error)
+	GetAll() ([]models.AboutUsRequest, error)
+	GetById(id int) (models.AboutUsRequest, error)
+	UpdateData(id int, v models.AboutUsRequest) (models.AboutUsRequest, error)
 	DeleteData(id []string) error
 }
 

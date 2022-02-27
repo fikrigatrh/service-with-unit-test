@@ -2,15 +2,19 @@ package models
 
 import "gorm.io/gorm"
 
-type AboutUs struct {
+type AboutUsRequest struct {
 	gorm.Model
-	Profil string `json:"profil"`
-	Visi   string `json:"visi"`
-	Misi   string `json:"misi"`
-	Motto  string `json:"motto"`
+	Profil string       `json:"profil"`
+	Visi   string       `json:"visi"`
+	Misi   []MisiDetail `json:"misi"`
+	Motto  string       `json:"motto"`
 }
 
 type Footer struct {
+}
+
+type MisiDetail struct {
+	Item string `json:"item"`
 }
 
 type Header struct {
