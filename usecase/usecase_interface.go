@@ -25,3 +25,8 @@ type UserUcInterface interface {
 	UpdateData(id int, v models.User) (models.User, error)
 	DeleteData(id []string) error
 }
+
+type ErrorHandlerUsecase interface {
+	ResponseError(error interface{}) (int, interface{})
+	ValidateRequest(error interface{}) (string, error)
+}

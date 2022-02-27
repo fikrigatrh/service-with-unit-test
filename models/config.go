@@ -40,8 +40,6 @@ type Logs struct {
 	Level        string    `json:"level" gorm:"column:level"`
 	Message      string    `json:"message" gorm:"column:message"`
 	CreatedAt    time.Time `json:"created_at" gorm:"column:created_at"`
-	RequestBI    string    `json:"request_bi" gorm:"type:JSONB NULL DEFAULT '{}'::JSONB"`
-	ResponseBI   string    `json:"response_bi" gorm:"type:JSONB NULL DEFAULT '{}'::JSONB"`
 	RequestBE    string    `json:"request_be" gorm:"type:JSONB NULL DEFAULT '{}'::JSONB"`
 	ResponseBE   string    `json:"response_be" gorm:"type:JSONB NULL DEFAULT '{}'::JSONB"`
 	PathError    string    `json:"path_error"`
@@ -49,7 +47,16 @@ type Logs struct {
 	TraceHeader  string    `json:"trace_header" gorm:"type:JSONB NULL DEFAULT '{}'::JSONB"`
 }
 
-type ResponseErrorCustom struct {
-	Status  int         `json:"status"`
-	Message interface{} `json:"message"`
+type ResponseCustomErr struct {
+	ResponseCode    string `json:"responseCode"`
+	ResponseMessage string `json:"responseMessage"`
 }
+
+type ErrMeta struct {
+	ServiceCode string
+	FieldErr    string
+}
+
+const (
+	ServiceCode = "10"
+)

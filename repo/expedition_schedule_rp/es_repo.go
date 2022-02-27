@@ -1,17 +1,19 @@
 package expedition_schedule_rp
 
 import (
+	"bitbucket.org/service-ekspedisi/config/log"
 	"bitbucket.org/service-ekspedisi/models"
 	"bitbucket.org/service-ekspedisi/repo"
 	"gorm.io/gorm"
 )
 
 type ExpeditionRepoStruct struct {
-	db *gorm.DB
+	db  *gorm.DB
+	log *log.LogCustom
 }
 
-func NewExpeditionRepo(db *gorm.DB) repo.ExpeditionRepoInterface {
-	return &ExpeditionRepoStruct{db: db}
+func NewExpeditionRepo(db *gorm.DB, log *log.LogCustom) repo.ExpeditionRepoInterface {
+	return &ExpeditionRepoStruct{db: db, log: log}
 }
 
 func (e ExpeditionRepoStruct) AddEs(v models.ExpeditionSchedule) (models.ExpeditionSchedule, error) {

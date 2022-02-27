@@ -1,6 +1,7 @@
 package expedition_schedule_uc
 
 import (
+	"bitbucket.org/service-ekspedisi/config/log"
 	"bitbucket.org/service-ekspedisi/models"
 	"bitbucket.org/service-ekspedisi/repo"
 	"bitbucket.org/service-ekspedisi/usecase"
@@ -8,10 +9,14 @@ import (
 
 type EsUcStruct struct {
 	repo repo.ExpeditionRepoInterface
+	log  *log.LogCustom
 }
 
-func NewEsUc(repo repo.ExpeditionRepoInterface) usecase.ExpeditionUcInterface {
-	return &EsUcStruct{repo: repo}
+func NewEsUc(repo repo.ExpeditionRepoInterface, log *log.LogCustom) usecase.ExpeditionUcInterface {
+	return &EsUcStruct{
+		repo: repo,
+		log:  log,
+	}
 }
 
 func (e EsUcStruct) AddEs(v models.ExpeditionSchedule) (models.ExpeditionSchedule, error) {

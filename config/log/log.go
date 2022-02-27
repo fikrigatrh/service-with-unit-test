@@ -66,18 +66,16 @@ func NewLogCustom(configServer models.ServerConfig) *LogCustom {
 	return instance
 }
 
-func (l *LogCustom) Success(reqBi, respBi, reqBe, respBe interface{}, description, respTime string, traceHeader map[string]string) {
+func (l *LogCustom) Success(reqBe, respBe interface{}, description, respTime string, traceHeader map[string]string) {
 
 	l.Logrus.WithFields(logrus.Fields{
 		"whoami":       l.WhoAmI,
 		"trace_header": traceHeader,
-		"request_bi":   reqBi,
-		"response_bi":  respBi,
 		"request_be":   reqBe,
 		"response_be":  respBe,
 	}).Info("SUCCESS")
 
-	l.LogDb.SuccessLogDb(reqBi, respBi, reqBe, respBe, description, respTime, traceHeader)
+	l.LogDb.SuccessLogDb(reqBe, respBe, description, respTime, traceHeader)
 }
 
 // for description please use format for example
@@ -92,8 +90,7 @@ func (l *LogCustom) Info(description string, traceHeader map[string]string, data
 
 // for description please use format for example
 // "usecase: sync data"
-func (l *LogCustom) Error(err error, description string, respTime string, traceHeader map[string]string, reqBI interface{},
-	respBI interface{}, reqBE interface{}, respBE interface{}) {
+func (l *LogCustom) Error(err error, description string, respTime string, traceHeader map[string]string, reqBE interface{}, respBE interface{}) {
 
 	err = errors.WithStack(err)
 	st := err.(stackTracer).StackTrace()
@@ -104,13 +101,11 @@ func (l *LogCustom) Error(err error, description string, respTime string, traceH
 		"trace_header":  traceHeader,
 		"error_cause":   stFormat,
 		"error_message": err.Error(),
-		"request_bi":    reqBI,
-		"response_bi":   respBI,
 		"request_be":    reqBE,
 		"response_be":   respBE,
 	}).Error(description)
 
-	l.LogDb.ErrorLogDb(err, description, respTime, stFormat, traceHeader, reqBI, respBI, reqBE, respBE)
+	l.LogDb.ErrorLogDb(err, description, respTime, stFormat, traceHeader, reqBE, respBE)
 }
 
 // for description please use format for example

@@ -1,17 +1,21 @@
 package about_us
 
 import (
+	"bitbucket.org/service-ekspedisi/config/log"
 	"bitbucket.org/service-ekspedisi/models"
+	"bitbucket.org/service-ekspedisi/models/contract"
 	"bitbucket.org/service-ekspedisi/repo"
+	"errors"
 	"gorm.io/gorm"
 )
 
 type AboutUsRepoStruct struct {
-	db *gorm.DB
+	db  *gorm.DB
+	log *log.LogCustom
 }
 
-func NewAboutUsRepo(db *gorm.DB) repo.AboutUsRepoInterface {
-	return &AboutUsRepoStruct{db}
+func NewAboutUsRepo(db *gorm.DB, log *log.LogCustom) repo.AboutUsRepoInterface {
+	return &AboutUsRepoStruct{db, log}
 }
 
 func (a AboutUsRepoStruct) AddAbout(v models.AboutUs) (models.AboutUs, error) {
@@ -19,7 +23,7 @@ func (a AboutUsRepoStruct) AddAbout(v models.AboutUs) (models.AboutUs, error) {
 	err := a.db.Debug().Create(&v).Error
 	if err != nil {
 		tx.Rollback()
-		return models.AboutUs{}, err
+		return models.AboutUs{}, errors.New(contract.ErrCannotSaveToDB)
 	}
 
 	tx.Commit()
@@ -39,7 +43,7 @@ func (a AboutUsRepoStruct) GetById(id int) (models.AboutUs, error) {
 	var v models.AboutUs
 	err := a.db.Debug().Where("id = ?", id).First(&v).Error
 	if err != nil {
-		return models.AboutUs{}, err
+		return models.AboutUs{}, errors.New(contract.ErrDataNotFound)
 	}
 	return v, err
 }

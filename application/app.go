@@ -3,9 +3,16 @@ package application
 import (
 	"bitbucket.org/service-ekspedisi/config/db"
 	"bitbucket.org/service-ekspedisi/config/env"
+	log2 "bitbucket.org/service-ekspedisi/config/log"
 	"bitbucket.org/service-ekspedisi/controllers"
+	"bitbucket.org/service-ekspedisi/middlewares"
 	"bitbucket.org/service-ekspedisi/models"
+	"bitbucket.org/service-ekspedisi/repo/about_us"
+	"bitbucket.org/service-ekspedisi/repo/expedition_schedule_rp"
 	"bitbucket.org/service-ekspedisi/repo/user_repo"
+	"bitbucket.org/service-ekspedisi/usecase/about_usecase"
+	error2 "bitbucket.org/service-ekspedisi/usecase/error"
+	"bitbucket.org/service-ekspedisi/usecase/expedition_schedule_uc"
 	"bitbucket.org/service-ekspedisi/usecase/user_usecase"
 	"fmt"
 	"github.com/Saucon/errcntrct"
@@ -19,6 +26,7 @@ func StartApp() {
 
 	env.NewEnv(".env")
 
+	logCustom := log2.NewLogCustom(env.Config)
 	if err := errcntrct.InitContract(env.Config.JSONPathFile); err != nil {
 		log.Println("main : init contract")
 	}
@@ -29,21 +37,33 @@ func StartApp() {
 	models.InitTable(dbBase.DB)
 
 	// init db log
-	dBaseLog := db.NewDB(env.Config, true)
-	dBaseLog.AutoMigrate(models.Logs{})
+	err := dbBase.DB.AutoMigrate(models.Logs{})
+	if err != nil {
+		return
+	}
+	logDb := log2.NewLogDbCustom(dbBase.DB)
+	logCustom.LogDb = logDb
 
 	// repository
 	repoUser := user_repo.NewUserRepo(dbBase.DB)
+	aboutRepo := about_us.NewAboutUsRepo(dbBase.DB, logCustom)
+	esRepo := expedition_schedule_rp.NewExpeditionRepo(dbBase.DB, logCustom)
 
+	errorUc := error2.NewErrorHandlerUsecase()
 	//usecase
-	ucUser :=  user_usecase.NewUserUsecase(repoUser)
+	ucUser := user_usecase.NewUserUsecase(repoUser)
+	abtUc := about_usecase.NewAboutUsUsecase(aboutRepo, logCustom)
+	esUc := expedition_schedule_uc.NewEsUc(esRepo, logCustom)
 
 	newRoute := router.Group("api/v1")
 
 	//newRoute.Use(middlewares.TokenAuthMiddleware())
+	middlewares.NewErrorHandler(newRoute, errorUc, logCustom)
 
 	// controller
-	controllers.NewUserController(newRoute,ucUser)
+	controllers.NewUserController(newRoute, ucUser)
+	controllers.NewAboutUsController(newRoute, abtUc, errorUc, logCustom)
+	controllers.NewExpeditionController(newRoute, esUc, errorUc, logCustom)
 
 	if err := router.Run(env.Config.ServiceHost + ":" + env.Config.Port); err != nil {
 		log.Fatal("error starting server", err)

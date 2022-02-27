@@ -1,16 +1,23 @@
 package controllers
 
 import (
+	"bitbucket.org/service-ekspedisi/config/log"
 	"bitbucket.org/service-ekspedisi/usecase"
 	"github.com/gin-gonic/gin"
 )
 
 type ExpeditionController struct {
-	uc usecase.ExpeditionUcInterface
+	uc   usecase.ExpeditionUcInterface
+	errH usecase.ErrorHandlerUsecase
+	logC *log.LogCustom
 }
 
-func NewExpeditionController(r *gin.RouterGroup, uc usecase.ExpeditionUcInterface) {
-	handler := &ExpeditionController{uc: uc}
+func NewExpeditionController(r *gin.RouterGroup, uc usecase.ExpeditionUcInterface, errH usecase.ErrorHandlerUsecase, logC *log.LogCustom) {
+	handler := &ExpeditionController{
+		uc:   uc,
+		errH: errH,
+		logC: logC,
+	}
 
 	r.GET("/expeditions", handler.GetAll)
 	r.GET("/expedition/:id", handler.GetById)
