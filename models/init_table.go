@@ -3,6 +3,9 @@ package models
 import "gorm.io/gorm"
 
 func InitTable(db *gorm.DB) {
-	db.Debug().AutoMigrate(&User{})
-	db.Debug().AutoMigrate(&Auth{})
+	err := db.Debug().AutoMigrate(&User{}, &AboutUsDb{}, &ExpeditionSchedule{},&Auth{})
+	if err != nil {
+		return
+	}
+
 }

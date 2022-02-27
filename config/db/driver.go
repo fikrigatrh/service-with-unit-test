@@ -27,7 +27,7 @@ func NewDB(conf models.ServerConfig, isDbLog bool) *Database {
 	defer func() {
 		if r := recover(); r != nil {
 			log.Error(errors.New("recover"), "config/db: recover from error db init", "",
-				nil, nil, nil, nil, nil)
+				nil, nil, nil)
 		}
 	}()
 
@@ -90,12 +90,12 @@ func doEvery(d time.Duration, f func(*gorm.DB, *l.LogCustom), x *gorm.DB, y *l.L
 func pingDb(db *gorm.DB, log *l.LogCustom) {
 	dbSQL, err := db.DB()
 	if err != nil {
-		log.Error(err, "config/db: can't ping the db, WTF", "", nil, nil, nil, nil, nil)
+		log.Error(err, "config/db: can't ping the db, WTF", "", nil, nil, nil)
 	}
 
 	err = dbSQL.Ping()
 	if err != nil {
-		log.Error(err, "config/db: can't ping the db, WTF", "", nil, nil, nil, nil, nil)
+		log.Error(err, "config/db: can't ping the db, WTF", "", nil, nil, nil)
 	}
 }
 
@@ -104,7 +104,7 @@ func (d *Database) AutoMigrate(schemas ...interface{}) {
 	for _, schema := range schemas {
 
 		if err := d.DB.AutoMigrate(schema); err != nil {
-			d.l.Error(errors.New(contract.ErrGeneralError), "", "", nil, nil, nil, nil, nil)
+			d.l.Error(errors.New(contract.ErrGeneralError), "", "", nil, nil, nil)
 		}
 	}
 }
@@ -113,7 +113,7 @@ func (db *Database) DropTable(schemas ...interface{}) error {
 	for _, schema := range schemas {
 
 		if err := db.DB.Migrator().DropTable(schema); err != nil {
-			db.l.Error(errors.New(contract.ErrGeneralError), "", "", nil, nil, nil, nil, nil)
+			db.l.Error(errors.New(contract.ErrGeneralError), "", "", nil, nil, nil)
 			return err
 		}
 	}

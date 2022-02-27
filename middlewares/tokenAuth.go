@@ -11,9 +11,9 @@ func TokenAuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		err := auth.TokenValid(c.Request)
 		if err != nil {
-			c.JSON(http.StatusUnauthorized, models.ResponseErrorCustom{
-				Status:  http.StatusUnauthorized,
-				Message: "unauthorized",
+			c.JSON(http.StatusUnauthorized, models.ResponseCustomErr{
+				ResponseCode:    "4011000",
+				ResponseMessage: "Unauthorized",
 			})
 			c.Abort()
 			return

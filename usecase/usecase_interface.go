@@ -3,10 +3,10 @@ package usecase
 import "bitbucket.org/service-ekspedisi/models"
 
 type AboutUsUcInterface interface {
-	AddAbout(v models.AboutUs) (models.AboutUs, error)
-	GetAll() ([]models.AboutUs, error)
-	GetById(id int) (models.AboutUs, error)
-	UpdateData(id int, v models.AboutUs) (models.AboutUs, error)
+	AddAbout(v models.AboutUsRequest) (models.AboutUsRequest, error)
+	GetAll() ([]models.AboutUsRequest, error)
+	GetById(id int) (models.AboutUsRequest, error)
+	UpdateData(id int, v models.AboutUsRequest) (models.AboutUsRequest, error)
 	DeleteData(id []string) error
 }
 
@@ -16,6 +16,7 @@ type ExpeditionUcInterface interface {
 	GetAll() ([]models.ExpeditionSchedule, error)
 	Update(id int, v models.ExpeditionSchedule) (models.ExpeditionSchedule, error)
 	DeleteData(id []string) error
+	GetByRoute(route string) ([]models.ExpeditionSchedule, error)
 }
 
 type UserUcInterface interface {
@@ -28,4 +29,17 @@ type UserUcInterface interface {
 
 type LoginUcInterface interface {
 	LoginUser(encrpytData models.EncryptData) (models.TokenStruct, error)
+}
+
+type ErrorHandlerUsecase interface {
+	ResponseError(error interface{}) (int, interface{})
+	ValidateRequest(error interface{}) (string, error)
+}
+
+type BlogUcInterface interface {
+	AddBlog(v models.Blog) (models.Blog, error)
+	GetAll() ([]models.Blog, error)
+	GetById(id int) (models.Blog, error)
+	UpdateData(id int, v models.Blog) (models.Blog, error)
+	DeleteData(id []string) error
 }

@@ -38,8 +38,8 @@ func NewLogDbCustom(db *gorm.DB) *LogDbCustom {
 			level = "success"
 		}
 
-		err = db.Debug().Exec("INSERT INTO logs(level, message, path_error, trace_header, request_bi, response_bi, request_be, response_be, created_at, response_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
-			level, entry.Message, entry.Data["error_cause"], entry.Data["trace_header"], entry.Data["request_bi"], entry.Data["response_bi"], entry.Data["request_be"], entry.Data["response_be"], entry.Time, entry.Data["response_time"]).Error
+		err = db.Debug().Exec("INSERT INTO logs(level, message, path_error, trace_header, request_be, response_be, created_at, response_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?);",
+			level, entry.Message, entry.Data["error_cause"], entry.Data["trace_header"], entry.Data["request_be"], entry.Data["response_be"], entry.Time, entry.Data["response_time"]).Error
 		if err != nil {
 			err := sqlDb.Rollback()
 			if err != nil {
@@ -61,7 +61,7 @@ func NewLogDbCustom(db *gorm.DB) *LogDbCustom {
 	return instanceDb
 }
 
-func (l *LogDbCustom) ErrorLogDb(err error, description, respTime, strFormat string, traceHeader map[string]string, reqBI, respBI, reqBE, respBE interface{}) {
+func (l *LogDbCustom) ErrorLogDb(err error, description, respTime, strFormat string, traceHeader map[string]string, reqBE, respBE interface{}) {
 	err = errors.WithStack(err)
 
 	l.Logrus.WithFields(logrus.Fields{
@@ -69,21 +69,17 @@ func (l *LogDbCustom) ErrorLogDb(err error, description, respTime, strFormat str
 		"trace_header":  traceHeader,
 		"error_cause":   strFormat,
 		"error_message": err.Error(),
-		"request_bi":    reqBI,
-		"response_bi":   respBI,
 		"request_be":    reqBE,
 		"response_be":   respBE,
 		"response_time": respTime,
 	}).Error(description)
 }
 
-func (l *LogDbCustom) SuccessLogDb(reqBI, respBI, reqBE, respBE interface{}, description, respTime string, traceHeader map[string]string) {
+func (l *LogDbCustom) SuccessLogDb(reqBE, respBE interface{}, description, respTime string, traceHeader map[string]string) {
 
 	l.Logrus.WithFields(logrus.Fields{
 		"whoami":        l.WhoAmI,
 		"trace_header":  traceHeader,
-		"request_bi":    reqBI,
-		"response_bi":   respBI,
 		"request_be":    reqBE,
 		"response_be":   respBE,
 		"response_time": respTime,
