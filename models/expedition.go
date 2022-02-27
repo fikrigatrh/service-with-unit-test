@@ -7,3 +7,10 @@ type ExpeditionSchedule struct {
 	Eta     string `json:"eta"`
 	Closing string `json:"closing"`
 }
+
+type PriceList struct {
+	Dari               string `json:"dari"`
+	Tujuan             string `json:"tujuan"`
+	HargaPerKilo       string `json:"harga_per_kilo"`
+	HargaPerMeterKubik string `json:"harga_per_meter_kubik"`
+}
