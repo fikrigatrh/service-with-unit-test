@@ -180,6 +180,38 @@ func (e errorHandlerUsecase) ValidateRequest(T interface{}) (string, error) {
 		}
 
 		return "", nil
+	case models.Blog:
+		err := v.Struct(T)
+		if err == nil {
+			return "", nil
+		}
+		for _, e := range err.(validator.ValidationErrors) {
+			if e.Value() != "" {
+				switch e.Tag() {
+				case "numeric", "max", "email", "lt", "gte", "len", "alpha":
+					field = e.Field()
+					errArr = errors.New(contract.ErrInvalidFieldFormat)
+					if e.Field() == "value" {
+						field = e.Field()
+						errArr = errors.New(contract.ErrInvalidAmount)
+					}
+				}
+				break
+			} else {
+				switch e.Tag() {
+				case "required":
+					field = e.Field()
+					errArr = errors.New(contract.ErrInvalidFieldMandatory)
+				}
+				break
+			}
+		}
+
+		if errArr != nil {
+			return field, errArr
+		}
+
+		return "", nil
 
 	default:
 		return "", errors.New(contract.ErrGeneralError)

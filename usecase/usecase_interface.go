@@ -31,3 +31,11 @@ type ErrorHandlerUsecase interface {
 	ResponseError(error interface{}) (int, interface{})
 	ValidateRequest(error interface{}) (string, error)
 }
+
+type BlogUcInterface interface {
+	AddBlog(v models.Blog) (models.Blog, error)
+	GetAll() ([]models.Blog, error)
+	GetById(id int) (models.Blog, error)
+	UpdateData(id int, v models.Blog) (models.Blog, error)
+	DeleteData(id []string) error
+}

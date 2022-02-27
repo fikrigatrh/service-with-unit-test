@@ -2,14 +2,23 @@ package models
 
 import "gorm.io/gorm"
 
+type SocialMediaDetail struct {
+	Instagram string `json:"instagram"`
+	Facebook  string `json:"facebook"`
+	Twitter   string `json:"twitter"`
+}
+
 type AboutUsRequest struct {
-	Profil            string                    `json:"profil"`
-	Visi              string                    `json:"visi"`
-	Misi              []MisiDetail              `json:"misi"`
-	Motto             string                    `json:"motto"`
+	Profil            string                    `json:"profil" validate:"required"`
+	Visi              string                    `json:"visi" validate:"required"`
+	Misi              []MisiDetail              `json:"misi" validate:"required"`
+	Motto             string                    `json:"motto" validate:"required"`
 	PerusahaanRekanan []PerusahaanRekananDetail `json:"perusahaan_rekanan"`
-	Office            string                    `json:"office"`
+	Office            string                    `json:"office" validate:"required"`
 	Warehouse         string                    `json:"warehouse"`
+	Email             string                    `json:"email" validate:"required,email"`
+	NoTelp            string                    `json:"no_telp" validate:"required"`
+	SocialMedia       []SocialMediaDetail       `json:"social_media" validate:"required"`
 }
 
 type Footer struct {
@@ -47,6 +56,9 @@ type AboutUsDb struct {
 	Misi              string `json:"misi" gorm:"type:JSONB NULL DEFAULT '{}'::JSONB"`
 	Motto             string `json:"motto"`
 	PerusahaanRekanan string `json:"perusahaan_rekanan" gorm:"type:JSONB NULL DEFAULT '{}'::JSONB"`
+	SocialMedia       string `json:"social_media" gorm:"type:JSONB NULL DEFAULT '{}'::JSONB"`
+	Email             string `json:"email"`
+	NoTelp            string `json:"no_telp"`
 }
 
 type PerusahaanRekananDetail struct {

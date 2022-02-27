@@ -79,7 +79,41 @@ func (a AboutUsController) AddAboutUs(c *gin.Context) {
 }
 
 func (a AboutUsController) UpdateAboutUs(c *gin.Context) {
+	var req models.AboutUsRequest
+	id := c.Query("id")
+	idRes, err := strconv.Atoi(id)
+	if err != nil {
+		return
+	}
 
+	err = c.ShouldBindJSON(&req)
+	if err != nil {
+		a.logC.Error(err, "controller: c bindjson", "", nil, nil, nil)
+		c.JSON(400, err.Error())
+		c.Abort()
+		return
+	}
+
+	fieldErr, err := a.errH.ValidateRequest(req)
+	if err != nil {
+		a.logC.Error(err, "controller: Validate request data", "", nil, req, nil)
+		c.Error(err).SetMeta(models.ErrMeta{
+			ServiceCode: models.ServiceCode,
+			FieldErr:    fieldErr,
+		})
+		c.Abort()
+		return
+	}
+
+	about, err := a.uc.UpdateData(idRes, req)
+	if err != nil {
+		a.logC.Error(err, "controller: update about us usecase", "", nil, req, nil)
+		c.Error(err)
+		c.Abort()
+		return
+	}
+
+	responseSuccess(c, about)
 }
 
 func (a AboutUsController) DeleteAboutUs(c *gin.Context) {
