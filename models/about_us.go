@@ -8,6 +8,8 @@ type AboutUsRequest struct {
 	Misi              []MisiDetail              `json:"misi"`
 	Motto             string                    `json:"motto"`
 	PerusahaanRekanan []PerusahaanRekananDetail `json:"perusahaan_rekanan"`
+	Office            string                    `json:"office"`
+	Warehouse         string                    `json:"warehouse"`
 }
 
 type Footer struct {
