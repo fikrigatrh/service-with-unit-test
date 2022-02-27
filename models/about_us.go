@@ -17,6 +17,7 @@ type Header struct {
 }
 
 type Booking struct {
+	gorm.Model
 	NamaPengirim             string `json:"nama_pengirim"`
 	Email                    string `json:"email" validate:"email"`
 	NoTelpPengirim           string `json:"no_telp_pengirim" validate:"numeric"`
