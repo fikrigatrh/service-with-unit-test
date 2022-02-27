@@ -16,7 +16,7 @@ type AboutUsRequest struct {
 	PerusahaanRekanan []PerusahaanRekananDetail `json:"perusahaan_rekanan"`
 	Office            string                    `json:"office" validate:"required"`
 	Warehouse         string                    `json:"warehouse"`
-	Email             string                    `json:"email" validate:"required"`
+	Email             string                    `json:"email" validate:"required,email"`
 	NoTelp            string                    `json:"no_telp" validate:"required"`
 	SocialMedia       []SocialMediaDetail       `json:"social_media" validate:"required"`
 }
