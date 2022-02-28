@@ -74,3 +74,7 @@ func (a LoginUsecaseStruct) LoginUser(encrpytData models.EncryptData) (models.To
 	return JWT, nil
 
 }
+
+func (a *LoginUsecaseStruct) DeleteAuthData(givenUuid string) (int, error) {
+	return a.repo.DeleteAuthData(givenUuid)
+}

@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"bitbucket.org/service-ekspedisi/auth"
+	"bitbucket.org/service-ekspedisi/middlewares"
 	"bitbucket.org/service-ekspedisi/models"
 	"bitbucket.org/service-ekspedisi/usecase"
 	"fmt"
@@ -18,6 +20,7 @@ func NewLoginController(r *gin.RouterGroup, uc usecase.LoginUcInterface) {
 	}
 
 	r.POST("/login", handler.Login)
+	r.POST("/logout", middlewares.TokenAuthMiddleware(),handler.Login)
 }
 
 func (a LoginController) Login(c *gin.Context) {
@@ -46,5 +49,37 @@ func (a LoginController) Login(c *gin.Context) {
 		"responseCode": "0000",
 		"responseMessage": "Success",
 		"data" : token,
+	})
+}
+
+func (a *LoginController) Logout(c *gin.Context) {
+	au, err := auth.ExtractTokenAuth(c.Request)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"responseCode": "1111",
+			"responseMessage": "Error when unauthorized",
+		})
+		return
+	}
+
+	deleted, errs := a.uc.DeleteAuthData(au.AuthUUID)
+	if deleted != 0 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"responseCode": "1111",
+			"responseMessage": "Data not found",
+		})
+		return
+	}
+	if errs != nil { //if any goes wrong
+		c.JSON(http.StatusBadRequest, gin.H{
+			"responseCode": "1111",
+			"responseMessage": "Error when unauthorized",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"responseCode": "0000",
+		"responseMessage": "Successfully logged out",
 	})
 }

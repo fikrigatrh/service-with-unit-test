@@ -30,6 +30,7 @@ type UserRepoInterface interface {
 type LoginRepoInterface interface {
 	LoginUser(email string) (models.User, error)
 	CreateAuth(authFix models.Auth) (models.Auth, error)
+	DeleteAuthData(givenUuid string) (int, error)
 }
 
 type BlogRepoInterface interface {

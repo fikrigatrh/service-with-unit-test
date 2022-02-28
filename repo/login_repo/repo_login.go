@@ -41,3 +41,14 @@ func (a LoginRepoStruct) CreateAuth(authFix models.Auth) (models.Auth, error) {
 	}
 	return authFix, nil
 }
+
+//Once a user row in the auth table
+func (a LoginRepoStruct) DeleteAuthData(givenUuid string) (int, error) {
+	au := &models.Auth{}
+	deleted := a.db.Debug().Where("auth_uuid = ?", givenUuid).Delete(&au)
+	if deleted.Error != nil {
+		return 0, deleted.Error
+	}
+	fmt.Println("Delete data from database success")
+	return 0, nil
+}
