@@ -27,6 +27,11 @@ type UserUcInterface interface {
 	DeleteData(id []string) error
 }
 
+type LoginUcInterface interface {
+	LoginUser(encrpytData models.EncryptData) (models.TokenStruct, error)
+	DeleteAuthData(givenUuid string) (int, error)
+}
+
 type ErrorHandlerUsecase interface {
 	ResponseError(error interface{}) (int, interface{})
 	ValidateRequest(error interface{}) (string, error)

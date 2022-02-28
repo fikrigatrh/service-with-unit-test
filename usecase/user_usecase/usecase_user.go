@@ -4,6 +4,7 @@ import (
 	"bitbucket.org/service-ekspedisi/models"
 	"bitbucket.org/service-ekspedisi/repo"
 	"bitbucket.org/service-ekspedisi/usecase"
+	"bitbucket.org/service-ekspedisi/utils"
 )
 
 type UserUsecaseStruct struct {
@@ -17,7 +18,10 @@ func NewUserUsecase(repo repo.UserRepoInterface) usecase.UserUcInterface {
 }
 
 func (a UserUsecaseStruct) AddUser(v models.User) (models.User, error) {
-	user, err := a.repo.AddUser(v)
+
+	userHash, err := utils.HashPassword(&v)
+
+	user, err := a.repo.AddUser(*userHash)
 
 	if err != nil {
 		return models.User{}, err

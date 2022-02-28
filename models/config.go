@@ -9,6 +9,7 @@ type ServerConfig struct {
 	ServiceHost   string `env:"SERVICE_HOST"`
 	Protocol      string `env:"PROTOCOL_SERVER"`
 	JWTSecret     string `env:"SECRET"`
+	EncKey        string `env:"KEY_DECRYPT"`
 	JSONPathFile  string `env:"JSON_PATHFILE,required"`
 	DBConfig      DBConfig
 	ElasticConfig ElasticConfig

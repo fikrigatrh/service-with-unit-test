@@ -7,7 +7,7 @@ func InitTable(db *gorm.DB) {
 	//if err != nil {
 	//	return
 	//}
-	err := db.Debug().AutoMigrate(&User{}, &AboutUsDb{}, &ExpeditionSchedule{}, &Blog{}, &Provinsi{}, &KotaKab{})
+	err := db.Debug().AutoMigrate(&User{}, &AboutUsDb{}, &ExpeditionSchedule{}, &Auth{}, &Blog{}, &Provinsi{}, &KotaKab{})
 	if err != nil {
 		return
 	}

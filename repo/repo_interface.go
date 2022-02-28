@@ -27,6 +27,13 @@ type UserRepoInterface interface {
 	DeleteData(id []string) error
 }
 
+type LoginRepoInterface interface {
+	LoginUser(email string) (models.User, error)
+	CreateAuth(authFix models.Auth) (models.Auth, error)
+	DeleteAuthData(givenUuid string) (int, error)
+	GetAuthByEmailAndAuthID(email string, authUUID string) (*models.Auth, error)
+}
+
 type BlogRepoInterface interface {
 	AddBlog(v models.Blog) (models.Blog, error)
 	GetAll() ([]models.Blog, error)
@@ -34,3 +41,4 @@ type BlogRepoInterface interface {
 	UpdateData(id int, v models.Blog) (models.Blog, error)
 	DeleteData(id []string) error
 }
+
