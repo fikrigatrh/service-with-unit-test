@@ -51,6 +51,10 @@ func (a AboutUsUsecaseStruct) AddAbout(req models.AboutUsRequest) (models.AboutU
 		Motto:             req.Motto,
 		PerusahaanRekanan: resPerusahaan,
 		SocialMedia:       resSosmed,
+		Email:             req.Email,
+		NoTelp:            req.NoTelp,
+		Office:            req.Office,
+		Warehouse:         req.Warehouse,
 	}
 
 	about, err := a.repo.AddAbout(v)
@@ -81,13 +85,25 @@ func (a AboutUsUsecaseStruct) AddAbout(req models.AboutUsRequest) (models.AboutU
 	return result, nil
 }
 
-func (a AboutUsUsecaseStruct) GetAll() ([]models.AboutUsRequest, error) {
-	about, err := a.repo.GetAll()
+func (a AboutUsUsecaseStruct) GetAboutUs() (models.AboutUsRequest, error) {
+	about, err := a.repo.GetAboutUs()
 	if err != nil {
-		return []models.AboutUsRequest{}, err
+		return models.AboutUsRequest{}, err
 	}
 
-	return about, nil
+	var result models.AboutUsRequest
+	json.Unmarshal([]byte(about.Misi), &result.Misi)
+	json.Unmarshal([]byte(about.PerusahaanRekanan), &result.PerusahaanRekanan)
+	json.Unmarshal([]byte(about.SocialMedia), &result.SocialMedia)
+	result.Profil = about.Profil
+	result.Motto = about.Motto
+	result.Visi = about.Visi
+	result.Email = about.Email
+	result.NoTelp = about.NoTelp
+	result.Office = about.Office
+	result.Warehouse = about.Warehouse
+
+	return result, nil
 }
 
 func (a AboutUsUsecaseStruct) GetById(id int) (models.AboutUsRequest, error) {
@@ -96,7 +112,19 @@ func (a AboutUsUsecaseStruct) GetById(id int) (models.AboutUsRequest, error) {
 		return models.AboutUsRequest{}, err
 	}
 
-	return about, nil
+	var result models.AboutUsRequest
+	result.Profil = about.Profil
+	result.Motto = about.Motto
+	result.Visi = about.Visi
+	json.Unmarshal([]byte(about.Misi), &result.Misi)
+	json.Unmarshal([]byte(about.PerusahaanRekanan), &result.PerusahaanRekanan)
+	json.Unmarshal([]byte(about.SocialMedia), &result.SocialMedia)
+	result.Email = about.Email
+	result.NoTelp = about.NoTelp
+	result.Office = about.Office
+	result.Warehouse = about.Warehouse
+
+	return result, nil
 }
 
 func (a AboutUsUsecaseStruct) UpdateData(id int, v models.AboutUsRequest) (models.AboutUsRequest, error) {

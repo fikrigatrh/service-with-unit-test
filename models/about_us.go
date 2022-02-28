@@ -18,7 +18,7 @@ type AboutUsRequest struct {
 	Warehouse         string                    `json:"warehouse"`
 	Email             string                    `json:"email" validate:"required,email"`
 	NoTelp            string                    `json:"no_telp" validate:"required"`
-	SocialMedia       []SocialMediaDetail       `json:"social_media" validate:"required"`
+	SocialMedia       SocialMediaDetail         `json:"social_media" validate:"required"`
 }
 
 type Footer struct {
@@ -59,6 +59,8 @@ type AboutUsDb struct {
 	SocialMedia       string `json:"social_media" gorm:"type:JSONB NULL DEFAULT '{}'::JSONB"`
 	Email             string `json:"email"`
 	NoTelp            string `json:"no_telp"`
+	Office            string `json:"office"`
+	Warehouse         string `json:"warehouse"`
 }
 
 type PerusahaanRekananDetail struct {

@@ -4,7 +4,7 @@ import "bitbucket.org/service-ekspedisi/models"
 
 type AboutUsUcInterface interface {
 	AddAbout(v models.AboutUsRequest) (models.AboutUsRequest, error)
-	GetAll() ([]models.AboutUsRequest, error)
+	GetAboutUs() (models.AboutUsRequest, error)
 	GetById(id int) (models.AboutUsRequest, error)
 	UpdateData(id int, v models.AboutUsRequest) (models.AboutUsRequest, error)
 	DeleteData(id []string) error

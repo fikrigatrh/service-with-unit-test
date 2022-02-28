@@ -113,24 +113,7 @@ func (e ExpeditionController) Delete(c *gin.Context) {
 func (e ExpeditionController) GetByRoute(c *gin.Context) {
 	var req models.ExpeditionSchedule
 
-	err := c.ShouldBindJSON(&req)
-	if err != nil {
-		e.logC.Error(err, "controller: c bindjson", "", nil, nil, nil)
-		c.JSON(400, err.Error())
-		c.Abort()
-		return
-	}
-
-	fieldErr, err := e.errH.ValidateRequest(req)
-	if err != nil {
-		e.logC.Error(err, "controller: Validate request data", "", nil, req, nil)
-		c.Error(err).SetMeta(models.ErrMeta{
-			ServiceCode: models.ServiceCode,
-			FieldErr:    fieldErr,
-		})
-		c.Abort()
-		return
-	}
+	req.Route = c.Query("route")
 
 	result, err := e.uc.GetByRoute(req.Route)
 	if err != nil {

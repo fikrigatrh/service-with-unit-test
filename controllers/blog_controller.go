@@ -22,8 +22,8 @@ func NewBlogController(r *gin.RouterGroup, uc usecase.BlogUcInterface, errH usec
 	}
 
 	r.POST("/add-blog", handler.Create)
-	r.GET("/get-blog", handler.Get)
-	r.GET("/get-blog-by-id", handler.GetById)
+	r.GET("/blogs", handler.Get)
+	r.GET("/blog", handler.GetById)
 	r.PUT("/update-blog", handler.Update)
 	r.DELETE("/delete-blog", handler.Delete)
 }
