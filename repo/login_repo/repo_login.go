@@ -52,3 +52,14 @@ func (a LoginRepoStruct) DeleteAuthData(givenUuid string) (int, error) {
 	fmt.Println("Delete data from database success")
 	return 0, nil
 }
+
+func (a LoginRepoStruct) GetAuthByEmailAndAuthID(email string, authUUID string) (*models.Auth, error) {
+	data := models.Auth{}
+	err := a.db.Debug().Raw("SELECT * FROM public.auths where email = ? and auth_uuid = ? ;", email, authUUID).Scan(&data).Error
+	if err != nil {
+		fmt.Println("[LoginStruct.GetAuthByUsernameAndAuthID] Error when GetAuthByEmailAndAuthID Repo")
+		return nil, err
+	}
+
+	return &data, nil
+}

@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"bitbucket.org/service-ekspedisi/auth"
-	"bitbucket.org/service-ekspedisi/middlewares"
 	"bitbucket.org/service-ekspedisi/models"
 	"bitbucket.org/service-ekspedisi/usecase"
 	"fmt"
@@ -20,7 +19,7 @@ func NewLoginController(r *gin.RouterGroup, uc usecase.LoginUcInterface) {
 	}
 
 	r.POST("/login", handler.Login)
-	r.POST("/logout", middlewares.TokenAuthMiddleware(),handler.Login)
+	r.POST("/logout", handler.Logout)
 }
 
 func (a LoginController) Login(c *gin.Context) {

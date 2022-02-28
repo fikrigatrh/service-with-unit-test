@@ -2,8 +2,10 @@ package auth
 
 import (
 	"bitbucket.org/service-ekspedisi/models"
+	"bitbucket.org/service-ekspedisi/repo"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/pkg/errors"
 	"net/http"
 	"os"
 	"strings"
@@ -30,6 +32,40 @@ func TokenValid(r *http.Request) error {
 	if _, ok := token.Claims.(jwt.Claims); !ok && !token.Valid {
 		return err
 	}
+	return nil
+}
+
+// Token Validation
+func TokenValidCustom(r *http.Request,loginRepo repo.LoginRepoInterface) error {
+	token, err := VerifyToken(r)
+	if err != nil {
+		return err
+	}
+
+	emptyStruct := models.Auth{}
+
+	if _, ok := token.Claims.(jwt.Claims); !ok && !token.Valid {
+		return err
+	}
+	claims, ok := token.Claims.(jwt.MapClaims) //the token claims should conform to MapClaims
+	if ok && token.Valid {
+		authUuid, ok := claims["auth_uuid"].(string) //convert the interface to string
+		if !ok {
+			return  err
+		}
+		email, done := claims["email"].(string)
+		if !done {
+			return  err
+		}
+		checkUsernameAndAuth,err := loginRepo.GetAuthByEmailAndAuthID(email,authUuid)
+		if err != nil {
+			return err
+		}
+		if checkUsernameAndAuth.DeletedAt != emptyStruct.DeletedAt {
+			return errors.New("1")
+		}
+	}
+
 	return nil
 }
 

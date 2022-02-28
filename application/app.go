@@ -72,11 +72,12 @@ func StartApp() {
 
 	// controller
 
-	controllers.NewLoginController(newRoute,ucLogin)
 	controllers.NewUserController(newRoute, ucUser,errorUc, logCustom)
 	controllers.NewAboutUsController(newRoute, abtUc, errorUc, logCustom)
 	controllers.NewExpeditionController(newRoute, esUc, errorUc, logCustom)
 	controllers.NewBlogController(newRoute, blogUc, errorUc, logCustom)
+	router.Use(middlewares.TokenAuthMiddlewareCustom(repoLogin))
+	controllers.NewLoginController(newRoute,ucLogin)
 
 
 	if err := router.Run(env.Config.Host + ":" + env.Config.Port); err != nil {
