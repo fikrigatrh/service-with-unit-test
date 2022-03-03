@@ -1,21 +1,25 @@
 package controllers
 
 import (
+	"bitbucket.org/service-ekspedisi/config/log"
 	"bitbucket.org/service-ekspedisi/models"
 	"bitbucket.org/service-ekspedisi/usecase"
 	"github.com/gin-gonic/gin"
-	"net/http"
 	"strconv"
 	"strings"
 )
 
 type UserController struct {
 	uc usecase.UserUcInterface
+	errH usecase.ErrorHandlerUsecase
+	logC *log.LogCustom
 }
 
-func NewUserController(r *gin.RouterGroup, uc usecase.UserUcInterface) {
+func NewUserController(r *gin.RouterGroup, uc usecase.UserUcInterface,errH usecase.ErrorHandlerUsecase, logC *log.LogCustom) {
 	handler := &UserController{
 		uc: uc,
+		errH: errH,
+		logC: logC,
 	}
 
 	r.POST("/add-user", handler.AddUser)
@@ -30,36 +34,41 @@ func (a UserController) AddUser(c *gin.Context) {
 
 	err := c.ShouldBindJSON(&user)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"responseCode":    "1111",
-			"responseMessage": "Something error",
-		})
+		a.logC.Error(err, "controller: c bindjson", "", nil, nil, nil)
+		c.JSON(400, err.Error())
+		c.Abort()
 		return
 	}
 
-	_, err = a.uc.AddUser(user)
+	fieldErr, err := a.errH.ValidateRequest(user)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"responseCode":    "1111",
-			"responseMessage": err,
+		a.logC.Error(err, "controller: Validate request data", "", nil, user, nil)
+		c.Error(err).SetMeta(models.ErrMeta{
+			ServiceCode: models.ServiceCode,
+			FieldErr:    fieldErr,
 		})
+		c.Abort()
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"responseCode":    "0000",
-		"responseMessage": "Registered successfully",
-	})
+	result, err := a.uc.AddUser(user)
+	if err != nil {
+		a.logC.Error(err, "controller: add user usecase", "", nil, user, nil)
+		c.Error(err)
+		c.Abort()
+		return
+	}
+
+	responseSuccess(c, result)
 }
 
 func (a UserController) GetAllUser(c *gin.Context) {
 
 	allDataUser, err := a.uc.GetAll()
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"responseCode":    "1111",
-			"responseMessage": err,
-		})
+		a.logC.Error(err, "controller: get user usecase", "", nil, nil, nil)
+		c.Error(err)
+		c.Abort()
 		return
 	}
 
@@ -67,14 +76,18 @@ func (a UserController) GetAllUser(c *gin.Context) {
 }
 
 func (a UserController) GetUserByID(c *gin.Context) {
-	id, _ := strconv.Atoi(c.Param("id"))
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.Error(err)
+		c.Abort()
+		return
+	}
 
 	data, err := a.uc.GetById(id)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"responseCode":    "1111",
-			"responseMessage": err,
-		})
+		a.logC.Error(err, "controller: get blog usecase", "", nil, nil, nil)
+		c.Error(err)
+		c.Abort()
 		return
 	}
 
@@ -82,15 +95,38 @@ func (a UserController) GetUserByID(c *gin.Context) {
 }
 
 func (a UserController) UpdateUser(c *gin.Context) {
-	id, _ := strconv.Atoi(c.Param("id"))
 	user := models.User{}
-	err := c.ShouldBindJSON(&user)
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.Error(err)
+		c.Abort()
+		return
+	}
+
+	err = c.ShouldBindJSON(&user)
+	if err != nil {
+		a.logC.Error(err, "controller: c bindjson", "", nil, nil, nil)
+		c.JSON(400, err.Error())
+		c.Abort()
+		return
+	}
+
+	fieldErr, err := a.errH.ValidateRequest(user)
+	if err != nil {
+		a.logC.Error(err, "controller: Validate request data", "", nil, user, nil)
+		c.Error(err).SetMeta(models.ErrMeta{
+			ServiceCode: models.ServiceCode,
+			FieldErr:    fieldErr,
+		})
+		c.Abort()
+		return
+	}
+
 	data, err := a.uc.UpdateData(id, user)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"responseCode":    "1111",
-			"responseMessage": err,
-		})
+		a.logC.Error(err, "controller: update blog usecase", "", nil, user, nil)
+		c.Error(err)
+		c.Abort()
 		return
 	}
 
@@ -104,15 +140,11 @@ func (a UserController) DeleteUser(c *gin.Context) {
 
 	err := a.uc.DeleteData(idRes)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"responseCode":    "1111",
-			"responseMessage": err,
-		})
+		a.logC.Error(err, "controller: delete blog usecase", "", nil, nil, nil)
+		c.Error(err)
+		c.Abort()
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"responseCode":    "0000",
-		"responseMessage": "Successfully deleted",
-	})
+	responseSuccess(c, nil)
 }

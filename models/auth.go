@@ -6,7 +6,14 @@ type Auth struct {
 	gorm.Model
 	AuthUUID string `gorm:"size:255;not null;" json:"auth_uuid"`
 	Username string `gorm:"not null;" json:"username"`
-	UserID   string `gorm:"not null;" json:"user_id"`
-	SessID   string `json:"sess_id"`
-	Token    string `json:"token"`
+	Email   string `gorm:"not null;" json:"email"`
+	Role     string `json:"role" gorm:"default:user"`
+}
+
+type EncryptData struct {
+	Encrypt string `json:"encrypt"`
+}
+
+type TokenStruct struct {
+	Token string `json:"token"`
 }

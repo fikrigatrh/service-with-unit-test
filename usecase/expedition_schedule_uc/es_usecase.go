@@ -69,6 +69,7 @@ func (e EsUcStruct) DeleteData(id []string) error {
 }
 
 func (e EsUcStruct) GetByRoute(route string) ([]models.ExpeditionSchedule, error) {
+	route = strings.ToUpper(route)
 	es, err := e.repo.GetByRoute(route)
 	if err != nil {
 		return []models.ExpeditionSchedule{}, err

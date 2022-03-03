@@ -2,8 +2,10 @@ package auth
 
 import (
 	"bitbucket.org/service-ekspedisi/models"
+	"bitbucket.org/service-ekspedisi/repo"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/pkg/errors"
 	"net/http"
 	"os"
 	"strings"
@@ -15,7 +17,8 @@ func CreateToken(authD models.Auth) (string, error) {
 	claims["authorized"] = true
 	claims["auth_uuid"] = authD.AuthUUID
 	claims["username"] = authD.Username
-	claims["user_id"] = authD.UserID
+	claims["email"] = authD.Email
+	claims["role"] = authD.Role
 	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString([]byte(os.Getenv("SECRET")))
@@ -29,6 +32,40 @@ func TokenValid(r *http.Request) error {
 	if _, ok := token.Claims.(jwt.Claims); !ok && !token.Valid {
 		return err
 	}
+	return nil
+}
+
+// Token Validation
+func TokenValidCustom(r *http.Request,loginRepo repo.LoginRepoInterface) error {
+	token, err := VerifyToken(r)
+	if err != nil {
+		return err
+	}
+
+	emptyStruct := models.Auth{}
+
+	if _, ok := token.Claims.(jwt.Claims); !ok && !token.Valid {
+		return err
+	}
+	claims, ok := token.Claims.(jwt.MapClaims) //the token claims should conform to MapClaims
+	if ok && token.Valid {
+		authUuid, ok := claims["auth_uuid"].(string) //convert the interface to string
+		if !ok {
+			return  err
+		}
+		email, done := claims["email"].(string)
+		if !done {
+			return  err
+		}
+		checkUsernameAndAuth,err := loginRepo.GetAuthByEmailAndAuthID(email,authUuid)
+		if err != nil {
+			return err
+		}
+		if checkUsernameAndAuth.DeletedAt != emptyStruct.DeletedAt {
+			return errors.New("1")
+		}
+	}
+
 	return nil
 }
 
@@ -81,7 +118,7 @@ func ExtractTokenAuth(r *http.Request) (*models.Auth, error) {
 			return nil, err
 		}
 		fmt.Println(username, ">>>>>>>>>>>")
-		userId, done := claims["user_id"].(string)
+		email, done := claims["email"].(string)
 		//userIdRes, err := strconv.Atoi(userId)
 		//if err != nil {
 		//	return nil, err
@@ -92,7 +129,7 @@ func ExtractTokenAuth(r *http.Request) (*models.Auth, error) {
 
 		res.AuthUUID = authUuid
 		res.Username = username
-		res.UserID = userId
+		res.Email = email
 		return &res, nil
 
 	}

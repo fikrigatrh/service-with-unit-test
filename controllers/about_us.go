@@ -25,16 +25,14 @@ func NewAboutUsController(r *gin.RouterGroup, uc usecase.AboutUsUcInterface, err
 	}
 
 	r.POST("/add-about-us", handler.AddAboutUs)
-	r.GET("/all-about-us", handler.GetAllAboutUs)
+	r.GET("/about-us", handler.GetAboutUs)
 	r.PUT("/update-about-us", handler.UpdateAboutUs)
 	r.DELETE("/delete-about-us", handler.DeleteAboutUs)
-	r.GET("about/", handler.GetAboutUsById)
+	r.GET("/about", handler.GetAboutUsById)
 }
 
-func (a AboutUsController) GetAllAboutUs(c *gin.Context) {
-	var aboutUsList []models.AboutUsRequest
-
-	aboutUsList, err := a.uc.GetAll()
+func (a AboutUsController) GetAboutUs(c *gin.Context) {
+	aboutUsList, err := a.uc.GetAboutUs()
 	if err != nil {
 		a.logC.Error(err, "controller: get all abaout usecase", "", nil, nil, nil)
 		c.Error(err)

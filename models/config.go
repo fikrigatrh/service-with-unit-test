@@ -9,6 +9,7 @@ type ServerConfig struct {
 	ServiceHost   string `env:"SERVICE_HOST"`
 	Protocol      string `env:"PROTOCOL_SERVER"`
 	JWTSecret     string `env:"SECRET"`
+	EncKey        string `env:"KEY_DECRYPT"`
 	JSONPathFile  string `env:"JSON_PATHFILE,required"`
 	DBConfig      DBConfig
 	ElasticConfig ElasticConfig
@@ -65,4 +66,34 @@ type ResponseSuccess struct {
 	ResponseCode    string      `json:"responseCode"`
 	ResponseMessage string      `json:"responseMessage"`
 	Data            interface{} `json:"data"`
+}
+
+type DaerahApi struct {
+	Provinsi []Detail `json:"provinsi"`
+}
+
+type Detail struct {
+	ID   int    `json:"id"`
+	Nama string `json:"nama"`
+}
+
+type Provinsi struct {
+	ID   int    `json:"id"`
+	Nama string `json:"nama"`
+}
+
+type KotaKabupaten struct {
+	KotaKabupaten []KotaKabDetail `json:"kota_kabupaten"`
+}
+
+type KotaKabDetail struct {
+	ID         int    `json:"id"`
+	IdProvinsi string `json:"id_provinsi"`
+	Nama       string `json:"nama"`
+}
+
+type KotaKab struct {
+	ID         int    `json:"id"`
+	IdProvinsi string `json:"id_provinsi"`
+	Nama       string `json:"nama"`
 }

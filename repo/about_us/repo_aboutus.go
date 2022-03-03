@@ -30,20 +30,20 @@ func (a AboutUsRepoStruct) AddAbout(v models.AboutUsDb) (models.AboutUsDb, error
 	return v, err
 }
 
-func (a AboutUsRepoStruct) GetAll() ([]models.AboutUsRequest, error) {
-	var v []models.AboutUsRequest
-	err := a.db.Debug().Find(&v).Error
+func (a AboutUsRepoStruct) GetAboutUs() (models.AboutUsDb, error) {
+	var v models.AboutUsDb
+	err := a.db.Debug().First(&v).Error
 	if err != nil {
-		return nil, err
+		return models.AboutUsDb{}, err
 	}
 	return v, err
 }
 
-func (a AboutUsRepoStruct) GetById(id int) (models.AboutUsRequest, error) {
-	var v models.AboutUsRequest
+func (a AboutUsRepoStruct) GetById(id int) (models.AboutUsDb, error) {
+	var v models.AboutUsDb
 	err := a.db.Debug().Where("id = ?", id).First(&v).Error
 	if err != nil {
-		return models.AboutUsRequest{}, errors.New(contract.ErrDataNotFound)
+		return models.AboutUsDb{}, errors.New(contract.ErrDataNotFound)
 	}
 	return v, err
 }
