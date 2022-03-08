@@ -64,6 +64,7 @@ func StartApp() {
 	esUc := expedition_schedule_uc.NewEsUc(esRepo, logCustom)
 	blogUc := blog2.NewBlogUc(blogRepo, logCustom)
 
+	router.Use(middlewares.CORSMiddleware())
 	newRoute := router.Group("api/v1")
 
 	//newRoute.Use(middlewares.TokenAuthMiddleware())
