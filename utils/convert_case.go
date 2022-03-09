@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"bitbucket.org/service-ekspedisi/models"
 	"strings"
 )
 
@@ -18,29 +19,29 @@ func ConvertMonth(str string) string {
 	sTemp := strings.Split(str, "-")
 	switch sTemp[1] {
 	case "01":
-		ss = "Jan"
+		ss = models.January
 	case "02":
-		ss = "Feb"
+		ss = models.February
 	case "03":
-		ss = "Mar"
+		ss = models.March
 	case "04":
-		ss = "Apr"
+		ss = models.April
 	case "05":
-		ss = "Mai"
+		ss = models.May
 	case "06":
-		ss = "Jun"
+		ss = models.June
 	case "07":
-		ss = "Jul"
+		ss = models.July
 	case "08":
-		ss = "Agu"
+		ss = models.August
 	case "09":
-		ss = "Sep"
+		ss = models.September
 	case "10":
-		ss = "Okt"
+		ss = models.October
 	case "11":
-		ss = "Nov"
+		ss = models.November
 	case "12":
-		ss = "Des"
+		ss = models.December
 	}
 
 	return ss
