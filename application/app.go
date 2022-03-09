@@ -27,6 +27,10 @@ import (
 func StartApp() {
 	router := gin.New()
 	router.Use(gin.Recovery())
+	err := router.SetTrustedProxies([]string{"0.0.0.0"})
+	if err != nil {
+		return
+	}
 
 	env.NewEnv(".env")
 
@@ -41,7 +45,7 @@ func StartApp() {
 	models.InitTable(dbBase.DB)
 
 	// init db log
-	err := dbBase.DB.AutoMigrate(models.Logs{})
+	err = dbBase.DB.AutoMigrate(models.Logs{})
 	if err != nil {
 		return
 	}

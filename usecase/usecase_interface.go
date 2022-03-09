@@ -13,7 +13,7 @@ type AboutUsUcInterface interface {
 type ExpeditionUcInterface interface {
 	AddEs(v models.ExpeditionSchedule) (models.ExpeditionSchedule, error)
 	GetById(id int) (models.ExpeditionSchedule, error)
-	GetAll() ([]models.ExpeditionSchedule, error)
+	GetAll(limit, offset, uri string) (models.ResponseDataPagination, error)
 	Update(id int, v models.ExpeditionSchedule) (models.ExpeditionSchedule, error)
 	DeleteData(id []string) error
 	GetByRoute(route string) ([]models.ExpeditionSchedule, error)

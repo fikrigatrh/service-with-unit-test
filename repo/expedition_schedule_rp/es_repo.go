@@ -40,14 +40,24 @@ func (e ExpeditionRepoStruct) GetById(id int) (models.ExpeditionSchedule, error)
 	return v, err
 }
 
-func (e ExpeditionRepoStruct) GetAll() ([]models.ExpeditionSchedule, error) {
+func (e ExpeditionRepoStruct) GetAll(limit, offset int) (models.ResponseDataPagination, error) {
 	var v []models.ExpeditionSchedule
-	err := e.db.Debug().Find(&v).Error
+	var temp models.ExpeditionSchedule
+	var count int64
+	var resp models.ResponseDataPagination
+
+	offset = (limit * offset) - limit
+	err := e.db.Debug().Order("updated_at desc").Limit(limit).Offset(offset).Find(&v).Error
+	e.db.Debug().Find(&temp).Count(&count)
 	if err != nil {
-		return []models.ExpeditionSchedule{}, err
+		return models.ResponseDataPagination{}, err
 	}
 
-	return v, err
+	resp.TotalData = int(count)
+	resp.Data = v
+	resp.NumberEnd = len(v)
+
+	return resp, err
 
 }
 

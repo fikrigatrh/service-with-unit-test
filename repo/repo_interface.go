@@ -13,7 +13,7 @@ type AboutUsRepoInterface interface {
 type ExpeditionRepoInterface interface {
 	AddEs(v models.ExpeditionSchedule) (models.ExpeditionSchedule, error)
 	GetById(id int) (models.ExpeditionSchedule, error)
-	GetAll() ([]models.ExpeditionSchedule, error)
+	GetAll(imit, offset int) (models.ResponseDataPagination, error)
 	Update(id int, v models.ExpeditionSchedule) (models.ExpeditionSchedule, error)
 	DeleteData(id []string) error
 	GetByRoute(rf, rd string) ([]models.ExpeditionSchedule, error)

@@ -34,7 +34,12 @@ func NewExpeditionController(r *gin.RouterGroup, uc usecase.ExpeditionUcInterfac
 
 func (e ExpeditionController) GetAll(c *gin.Context) {
 
-	expeditions, err := e.uc.GetAll()
+	limit := c.Query("limit")
+	offset := c.Query("page")
+
+	uri := c.Request.Host + c.Request.URL.String()
+
+	expeditions, err := e.uc.GetAll(limit, offset, uri)
 	if err != nil {
 		e.logC.Error(err, "controller: c get all usecase", "", nil, nil, nil)
 		c.Error(err)

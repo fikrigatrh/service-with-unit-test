@@ -1,6 +1,7 @@
 package expedition_schedule_uc
 
 import (
+	"bitbucket.org/service-ekspedisi/config/env"
 	"bitbucket.org/service-ekspedisi/config/log"
 	"bitbucket.org/service-ekspedisi/models"
 	"bitbucket.org/service-ekspedisi/models/contract"
@@ -82,38 +83,119 @@ func (e EsUcStruct) GetById(id int) (models.ExpeditionSchedule, error) {
 	return es, nil
 }
 
-func (e EsUcStruct) GetAll() ([]models.ExpeditionSchedule, error) {
-	all, err := e.repo.GetAll()
-	if err != nil {
-		return nil, err
+func (e EsUcStruct) GetAll(limit, offset, uri string) (models.ResponseDataPagination, error) {
+
+	limitTemp, _ := strconv.Atoi(limit)
+	offsetTemp, _ := strconv.Atoi(offset)
+
+	if limitTemp == 0 {
+		limitTemp = 1
 	}
 
-	for i, _ := range all {
-		all[i].RouteFrom = ""
-		all[i].RouteDestination = ""
+	if offsetTemp <= 0 {
+		offsetTemp = 1
+	}
 
-		monthEta := utils.ConvertMonth(all[i].Eta)
-		etaTemp := strings.Split(all[i].Eta, "-")
+	all, err := e.repo.GetAll(limitTemp, offsetTemp)
+	if err != nil {
+		return models.ResponseDataPagination{}, err
+	}
+
+	for i, _ := range all.Data {
+		all.Data[i].RouteFrom = ""
+		all.Data[i].RouteDestination = ""
+
+		monthEta := utils.ConvertMonth(all.Data[i].Eta)
+		etaTemp := strings.Split(all.Data[i].Eta, "-")
 		str := etaTemp[2] + "-" + monthEta + "-" + etaTemp[0]
 		etaTempArr := strings.Split(str, "-")
 		eta := strings.Join(etaTempArr, " ")
-		all[i].Eta = eta
+		all.Data[i].Eta = eta
 
-		monthEtd := utils.ConvertMonth(all[i].Etd)
-		etdTemp := strings.Split(all[i].Etd, "-")
+		monthEtd := utils.ConvertMonth(all.Data[i].Etd)
+		etdTemp := strings.Split(all.Data[i].Etd, "-")
 		strEtd := etdTemp[2] + "-" + monthEtd + "-" + etdTemp[0]
 		etdTempArr := strings.Split(strEtd, "-")
 		etd := strings.Join(etdTempArr, " ")
-		all[i].Etd = etd
+		all.Data[i].Etd = etd
 
-		monthClosing := utils.ConvertMonth(all[i].Closing)
-		closingTemp := strings.Split(all[i].Closing, "-")
+		monthClosing := utils.ConvertMonth(all.Data[i].Closing)
+		closingTemp := strings.Split(all.Data[i].Closing, "-")
 		strClosing := closingTemp[2] + "-" + monthClosing + "-" + closingTemp[0]
 		cosingTempArr := strings.Split(strClosing, "-")
 		closing := strings.Join(cosingTempArr, " ")
-		all[i].Closing = closing
+		all.Data[i].Closing = closing
 		//etdTemp := strings.Split(all[i].Etd, "-")
 		//closingTemp := strings.Split(all[i].Closing, "-")
+	}
+
+	lengthData := all.TotalData
+	eachData := all.NumberEnd
+
+	if lengthData == 0 {
+		lengthData = limitTemp
+	}
+
+	if limitTemp > lengthData {
+		limitTemp = lengthData
+	}
+
+	tempTotalPage := lengthData / limitTemp
+
+	if lengthData%limitTemp != 0 {
+		tempTotalPage = tempTotalPage + 1
+	}
+
+	all.TotalData = lengthData
+	all.DataPerPage = limitTemp
+	all.TotalPage = tempTotalPage
+
+	if eachData < limitTemp {
+		all.NumberEnd = (limitTemp * (offsetTemp - 1)) + eachData
+	} else {
+		all.NumberEnd = limitTemp * offsetTemp
+	}
+
+	if offsetTemp == 1 {
+		all.NumberCurrent = 1
+	} else if all.TotalPage == offsetTemp && eachData == 1 {
+		all.NumberCurrent = all.NumberEnd
+	} else if all.TotalPage == offsetTemp && eachData != 1 {
+		all.NumberCurrent = (all.NumberEnd - eachData) + 1
+	} else {
+		all.NumberCurrent = (all.NumberEnd - limitTemp) + 1
+	}
+
+	all.Page = offsetTemp
+
+	for i2, _ := range all.Data {
+		all.Data[i2].No = i2 + all.NumberCurrent
+	}
+
+	tempUrl := strings.Split(uri, "&page=")
+	atoi, _ := strconv.Atoi(tempUrl[1])
+	tempPageNext := atoi + 1
+	tempPagePrev := atoi - 1
+	if tempPagePrev < 1 {
+		tempPagePrev = 1
+	}
+	nextPage := strconv.Itoa(tempPageNext)
+	prevPage := strconv.Itoa(tempPagePrev)
+
+	if all.Page <= 1 {
+		if all.DataPerPage == all.TotalData {
+			all.PrevUrlPage = ""
+			all.NextUrlPage = ""
+		} else {
+			all.PrevUrlPage = ""
+			all.NextUrlPage = env.Config.Protocol + "://" + tempUrl[0] + "&page=" + nextPage
+		}
+	} else if all.Page == all.TotalPage {
+		all.PrevUrlPage = env.Config.Protocol + "://" + tempUrl[0] + "&page=" + prevPage
+		all.NextUrlPage = ""
+	} else {
+		all.PrevUrlPage = env.Config.Protocol + "://" + tempUrl[0] + "&page=" + prevPage
+		all.NextUrlPage = env.Config.Protocol + "://" + tempUrl[0] + "&page=" + nextPage
 	}
 
 	return all, nil
