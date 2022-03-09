@@ -97,3 +97,18 @@ type KotaKab struct {
 	IdProvinsi string `json:"id_provinsi"`
 	Nama       string `json:"nama"`
 }
+
+const (
+	January   = "Jan"
+	February  = "Feb"
+	March     = "Mar"
+	April     = "Apr"
+	May       = "May"
+	June      = "Jun"
+	July      = "Jul"
+	August    = "Aug"
+	September = "Sep"
+	October   = "Oct"
+	November  = "Nov"
+	December  = "Dec"
+)

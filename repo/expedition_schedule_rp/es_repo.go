@@ -78,12 +78,23 @@ func (e ExpeditionRepoStruct) DeleteData(id []string) error {
 
 }
 
-func (e ExpeditionRepoStruct) GetByRoute(string string) ([]models.ExpeditionSchedule, error) {
+func (e ExpeditionRepoStruct) GetByRoute(rf, rd string) ([]models.ExpeditionSchedule, error) {
 	var v []models.ExpeditionSchedule
-	err := e.db.Debug().Where("route = ?", string).Find(&v).Error
+	err := e.db.Debug().Where("route_from = ? and route_destination = ? and to_date(eta, 'YYYY-MM-DD') >= current_date", rf, rd).Find(&v).Error
 	if err != nil {
 		return []models.ExpeditionSchedule{}, err
 	}
 
 	return v, err
+}
+
+func (e ExpeditionRepoStruct) GetKotaById(id int) (models.KotaKab, error) {
+	var v models.KotaKab
+	err := e.db.Debug().Table("kota_kabs").First(&v, id).Error
+	if err != nil {
+		return models.KotaKab{}, errors.New(contract.ErrDataNotFound)
+	}
+
+	return v, err
+
 }

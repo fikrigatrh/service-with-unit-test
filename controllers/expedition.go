@@ -34,6 +34,15 @@ func NewExpeditionController(r *gin.RouterGroup, uc usecase.ExpeditionUcInterfac
 
 func (e ExpeditionController) GetAll(c *gin.Context) {
 
+	expeditions, err := e.uc.GetAll()
+	if err != nil {
+		e.logC.Error(err, "controller: c get all usecase", "", nil, nil, nil)
+		c.Error(err)
+		c.Abort()
+		return
+	}
+
+	responseSuccess(c, expeditions)
 }
 
 func (e ExpeditionController) GetById(c *gin.Context) {

@@ -16,7 +16,8 @@ type ExpeditionRepoInterface interface {
 	GetAll() ([]models.ExpeditionSchedule, error)
 	Update(id int, v models.ExpeditionSchedule) (models.ExpeditionSchedule, error)
 	DeleteData(id []string) error
-	GetByRoute(string string) ([]models.ExpeditionSchedule, error)
+	GetByRoute(rf, rd string) ([]models.ExpeditionSchedule, error)
+	GetKotaById(id int) (models.KotaKab, error)
 }
 
 type UserRepoInterface interface {
@@ -41,4 +42,3 @@ type BlogRepoInterface interface {
 	UpdateData(id int, v models.Blog) (models.Blog, error)
 	DeleteData(id []string) error
 }
-

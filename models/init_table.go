@@ -3,12 +3,12 @@ package models
 import "gorm.io/gorm"
 
 func InitTable(db *gorm.DB) {
-	//err := db.Debug().Migrator().DropTable(&KotaKab{}, &Provinsi{})
+	//err := db.Debug().Migrator().DropTable(&ExpeditionSchedule{})
 	//if err != nil {
 	//	return
 	//}
-	err := db.Debug().AutoMigrate(&User{}, &AboutUsDb{}, &ExpeditionSchedule{}, &Auth{}, &Blog{}, &Provinsi{}, &KotaKab{})
-	if err != nil {
+	errs := db.Debug().AutoMigrate(&User{}, &AboutUsDb{}, &ExpeditionSchedule{}, &Auth{}, &Blog{}, &Provinsi{}, &KotaKab{})
+	if errs != nil {
 		return
 	}
 
