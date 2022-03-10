@@ -11,5 +11,6 @@
   "500XX01": {"var": "ErrInternalError", "msg": "Internal Server Error"},
   "500XX02": {"var": "ErrCannotSaveToDB", "msg": "Cannot Save to DB"},
   "500XX03": {"var": "ErrCannotSaveToFile", "msg": "Cannot Save File"},
-  "500XX04": {"var": "ErrTimeout", "msg": "Timeout"}
+  "500XX04": {"var": "ErrTimeout", "msg": "Timeout"},
+  "500XX05": {"var": "ErrDateSchedule", "msg": "Please check date closing, etd, eta"}
 }

@@ -22,4 +22,5 @@ const (
 	ErrCannotSaveToFile            = "500XX03"
 	ErrTimeout                     = "500XX04"
 	ErrDataNotFound                = "404XX00"
+	ErrDateSchedule                = "500XX05"
 )

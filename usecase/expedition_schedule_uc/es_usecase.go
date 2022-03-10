@@ -63,7 +63,7 @@ func (e EsUcStruct) AddEs(v models.ExpeditionSchedule) (models.ExpeditionSchedul
 	}
 
 	if closingTemp.Unix() > etdTemp.Unix() || etdTemp.Unix() > etaTemp.Unix() || closingTemp.Unix() > etaTemp.Unix() {
-		return models.ExpeditionSchedule{}, errors.New(contract.ErrBadRequest)
+		return models.ExpeditionSchedule{}, errors.New(contract.ErrDateSchedule)
 	}
 
 	es, err := e.repo.AddEs(v)

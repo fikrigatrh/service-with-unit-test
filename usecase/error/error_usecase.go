@@ -71,6 +71,8 @@ func (e errorHandlerUsecase) ResponseError(A interface{}) (int, interface{}) {
 			return responseErrorAdapter(T.(error), http.StatusRequestTimeout, "", serviceCode, "")
 		case contract.ErrDataNotFound:
 			return responseErrorAdapter(T.(error), http.StatusNotFound, "", serviceCode, "")
+		case contract.ErrDateSchedule:
+			return responseErrorAdapter(T.(error), http.StatusBadRequest, "", serviceCode, "")
 		default:
 			return responseErrorAdapter(errors.New(contract.ErrGeneralError), http.StatusInternalServerError, "", serviceCode, "")
 		}
