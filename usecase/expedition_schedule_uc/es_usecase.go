@@ -105,6 +105,9 @@ func (e EsUcStruct) GetAll(limit, offset, uri string) (models.ResponseDataPagina
 		all.Data[i].RouteFrom = ""
 		all.Data[i].RouteDestination = ""
 
+		if len(all.Data[i].Eta) != 10 || len(all.Data[i].Etd) != 10 || len(all.Data[i].Closing) != 10 {
+			return models.ResponseDataPagination{}, errors.New(contract.ErrBadRequest)
+		}
 		monthEta := utils.ConvertMonth(all.Data[i].Eta)
 		etaTemp := strings.Split(all.Data[i].Eta, "-")
 		str := etaTemp[2] + "-" + monthEta + "-" + etaTemp[0]
