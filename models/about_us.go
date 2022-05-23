@@ -25,7 +25,7 @@ type Footer struct {
 }
 
 type MisiDetail struct {
-	Item string `json:"item"`
+	Item string `json:"item" validate:"required"`
 }
 
 type Header struct {

@@ -37,10 +37,10 @@ type ElasticConfig struct {
 }
 
 type Logs struct {
-	ID           uint      `json:"id" gorm:"column:id"`
-	Level        string    `json:"level" gorm:"column:level"`
-	Message      string    `json:"message" gorm:"column:message"`
-	CreatedAt    time.Time `json:"created_at" gorm:"column:created_at"`
+	ID           uint      `json:"id"`
+	Level        string    `json:"level"`
+	Message      string    `json:"message"`
+	CreatedAt    time.Time `json:"created_at"`
 	RequestBE    string    `json:"request_be" gorm:"type:JSONB NULL DEFAULT '{}'::JSONB"`
 	ResponseBE   string    `json:"response_be" gorm:"type:JSONB NULL DEFAULT '{}'::JSONB"`
 	PathError    string    `json:"path_error"`

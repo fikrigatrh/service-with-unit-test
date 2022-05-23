@@ -47,7 +47,7 @@ func (e ExpeditionController) GetAll(c *gin.Context) {
 		return
 	}
 
-	responseSuccess(c, expeditions)
+	ResponseSuccess(c, expeditions)
 }
 
 func (e ExpeditionController) GetById(c *gin.Context) {
@@ -69,7 +69,7 @@ func (e ExpeditionController) GetById(c *gin.Context) {
 		return
 	}
 
-	responseSuccess(c, result)
+	ResponseSuccess(c, result)
 }
 
 func (e ExpeditionController) Create(c *gin.Context) {
@@ -102,7 +102,7 @@ func (e ExpeditionController) Create(c *gin.Context) {
 		return
 	}
 
-	responseSuccess(c, result)
+	ResponseSuccess(c, result)
 }
 
 func (e ExpeditionController) Update(c *gin.Context) {
@@ -121,7 +121,7 @@ func (e ExpeditionController) Delete(c *gin.Context) {
 		return
 	}
 
-	responseSuccess(c, nil)
+	ResponseSuccess(c, nil)
 }
 
 func (e ExpeditionController) GetByRoute(c *gin.Context) {
@@ -137,5 +137,5 @@ func (e ExpeditionController) GetByRoute(c *gin.Context) {
 		return
 	}
 
-	responseSuccess(c, result)
+	ResponseSuccess(c, result)
 }

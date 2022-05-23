@@ -10,14 +10,14 @@ import (
 )
 
 type UserController struct {
-	uc usecase.UserUcInterface
+	uc   usecase.UserUcInterface
 	errH usecase.ErrorHandlerUsecase
 	logC *log.LogCustom
 }
 
-func NewUserController(r *gin.RouterGroup, uc usecase.UserUcInterface,errH usecase.ErrorHandlerUsecase, logC *log.LogCustom) {
+func NewUserController(r *gin.RouterGroup, uc usecase.UserUcInterface, errH usecase.ErrorHandlerUsecase, logC *log.LogCustom) {
 	handler := &UserController{
-		uc: uc,
+		uc:   uc,
 		errH: errH,
 		logC: logC,
 	}
@@ -59,7 +59,7 @@ func (a UserController) AddUser(c *gin.Context) {
 		return
 	}
 
-	responseSuccess(c, result)
+	ResponseSuccess(c, result)
 }
 
 func (a UserController) GetAllUser(c *gin.Context) {
@@ -72,7 +72,7 @@ func (a UserController) GetAllUser(c *gin.Context) {
 		return
 	}
 
-	responseSuccess(c, allDataUser)
+	ResponseSuccess(c, allDataUser)
 }
 
 func (a UserController) GetUserByID(c *gin.Context) {
@@ -91,7 +91,7 @@ func (a UserController) GetUserByID(c *gin.Context) {
 		return
 	}
 
-	responseSuccess(c, data)
+	ResponseSuccess(c, data)
 }
 
 func (a UserController) UpdateUser(c *gin.Context) {
@@ -130,7 +130,7 @@ func (a UserController) UpdateUser(c *gin.Context) {
 		return
 	}
 
-	responseSuccess(c, data)
+	ResponseSuccess(c, data)
 }
 
 func (a UserController) DeleteUser(c *gin.Context) {
@@ -146,5 +146,5 @@ func (a UserController) DeleteUser(c *gin.Context) {
 		return
 	}
 
-	responseSuccess(c, nil)
+	ResponseSuccess(c, nil)
 }

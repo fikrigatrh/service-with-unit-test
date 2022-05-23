@@ -27,10 +27,6 @@ import (
 func StartApp() {
 	router := gin.New()
 	router.Use(gin.Recovery())
-	//errs := router.SetTrustedProxies([]string{"0.0.0.0"})
-	//if errs != nil {
-	//	return
-	//}
 
 	env.NewEnv(".env")
 
@@ -39,25 +35,27 @@ func StartApp() {
 		log.Println("main : init contract")
 	}
 
-	dbBase := db.NewDB(env.Config, false)
+	dbBase := db.NewDB(env.Config, false).DB
 	fmt.Println(dbBase)
-	//dbBase.AutoMigrate(nil)
-	models.InitTable(dbBase.DB)
-
-	// init db log
-	err := dbBase.DB.AutoMigrate(models.Logs{})
+	//dbBase.Debug().Migrator().DropTable(models.ExpeditionSchedule{})
+	err := dbBase.Debug().AutoMigrate(models.ExpeditionSchedule{})
 	if err != nil {
+		log.Println("main: cannot auto migrate remapping response code")
 		return
 	}
-	logDb := log2.NewLogDbCustom(dbBase.DB)
+	//dbBase.AutoMigrate(nil)
+	models.InitTable(dbBase)
+
+	// init db log
+	logDb := log2.NewLogDbCustom(dbBase)
 	logCustom.LogDb = logDb
 
 	// repository
-	repoUser := user_repo.NewUserRepo(dbBase.DB)
-	repoLogin := login_repo.NewLoginRepo(dbBase.DB)
-	aboutRepo := about_us.NewAboutUsRepo(dbBase.DB, logCustom)
-	esRepo := expedition_schedule_rp.NewExpeditionRepo(dbBase.DB, logCustom)
-	blogRepo := blog.NewBlogRepo(dbBase.DB, logCustom)
+	repoUser := user_repo.NewUserRepo(dbBase)
+	repoLogin := login_repo.NewLoginRepo(dbBase)
+	aboutRepo := about_us.NewAboutUsRepo(dbBase, logCustom)
+	esRepo := expedition_schedule_rp.NewExpeditionRepo(dbBase, logCustom)
+	blogRepo := blog.NewBlogRepo(dbBase, logCustom)
 
 	errorUc := error2.NewErrorHandlerUsecase()
 	//usecase
@@ -80,7 +78,7 @@ func StartApp() {
 	controllers.NewAboutUsController(newRoute, abtUc, errorUc, logCustom)
 	controllers.NewExpeditionController(newRoute, esUc, errorUc, logCustom)
 	controllers.NewBlogController(newRoute, blogUc, errorUc, logCustom)
-	controllers.NewDaerahController(newRoute, dbBase.DB)
+	controllers.NewDaerahController(newRoute, dbBase)
 	router.Use(middlewares.TokenAuthMiddlewareCustom(repoLogin))
 	controllers.NewLoginController(newRoute, ucLogin)
 

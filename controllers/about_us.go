@@ -7,8 +7,10 @@ import (
 	"bitbucket.org/service-ekspedisi/usecase"
 	"errors"
 	"github.com/gin-gonic/gin"
+	"net/http/httptest"
 	"strconv"
 	"strings"
+	"testing"
 )
 
 type AboutUsController struct {
@@ -40,7 +42,7 @@ func (a AboutUsController) GetAboutUs(c *gin.Context) {
 		return
 	}
 
-	responseSuccess(c, aboutUsList)
+	ResponseSuccess(c, aboutUsList)
 }
 
 func (a AboutUsController) AddAboutUs(c *gin.Context) {
@@ -73,7 +75,7 @@ func (a AboutUsController) AddAboutUs(c *gin.Context) {
 		return
 	}
 
-	responseSuccess(c, about)
+	ResponseSuccess(c, about)
 }
 
 func (a AboutUsController) UpdateAboutUs(c *gin.Context) {
@@ -111,7 +113,7 @@ func (a AboutUsController) UpdateAboutUs(c *gin.Context) {
 		return
 	}
 
-	responseSuccess(c, about)
+	ResponseSuccess(c, about)
 }
 
 func (a AboutUsController) DeleteAboutUs(c *gin.Context) {
@@ -126,7 +128,7 @@ func (a AboutUsController) DeleteAboutUs(c *gin.Context) {
 		return
 	}
 
-	responseSuccess(c, nil)
+	ResponseSuccess(c, nil)
 }
 
 func (a AboutUsController) GetAboutUsById(c *gin.Context) {
@@ -148,10 +150,10 @@ func (a AboutUsController) GetAboutUsById(c *gin.Context) {
 		return
 	}
 
-	responseSuccess(c, result)
+	ResponseSuccess(c, result)
 }
 
-func responseSuccess(c *gin.Context, data interface{}) *gin.Context {
+func ResponseSuccess(c *gin.Context, data interface{}) *gin.Context {
 	res := models.ResponseSuccess{
 		ResponseCode:    "0000",
 		ResponseMessage: "success",
@@ -160,4 +162,11 @@ func responseSuccess(c *gin.Context, data interface{}) *gin.Context {
 	c.JSON(200, res)
 
 	return c
+}
+
+func TestGetAbouUsMethodTwo(t *testing.T) {
+	w := httptest.NewRecorder()
+	_, engine := gin.CreateTestContext(w)
+	engine.GET("/api/test/code_review/repo")
+
 }

@@ -56,7 +56,7 @@ func (b BlogController) Create(c *gin.Context) {
 		return
 	}
 
-	responseSuccess(c, result)
+	ResponseSuccess(c, result)
 }
 
 func (b BlogController) Get(c *gin.Context) {
@@ -69,7 +69,7 @@ func (b BlogController) Get(c *gin.Context) {
 		return
 	}
 
-	responseSuccess(c, result)
+	ResponseSuccess(c, result)
 }
 
 func (b BlogController) GetById(c *gin.Context) {
@@ -88,7 +88,7 @@ func (b BlogController) GetById(c *gin.Context) {
 		return
 	}
 
-	responseSuccess(c, result)
+	ResponseSuccess(c, result)
 }
 
 func (b BlogController) Update(c *gin.Context) {
@@ -124,7 +124,7 @@ func (b BlogController) Update(c *gin.Context) {
 		return
 	}
 
-	responseSuccess(c, result)
+	ResponseSuccess(c, result)
 }
 
 func (b BlogController) Delete(c *gin.Context) {
@@ -139,5 +139,5 @@ func (b BlogController) Delete(c *gin.Context) {
 		return
 	}
 
-	responseSuccess(c, nil)
+	ResponseSuccess(c, nil)
 }
