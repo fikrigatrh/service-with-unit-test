@@ -12,7 +12,6 @@ require (
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/go-test/deep v1.0.8
 	github.com/joho/godotenv v1.4.0
-	github.com/ledongthuc/goterators v1.0.2
 	github.com/lib/pq v1.10.4
 	github.com/olivere/elastic/v7 v7.0.32
 	github.com/pkg/errors v0.9.1
@@ -53,7 +52,6 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/stretchr/objx v0.3.0 // indirect
 	github.com/ugorji/go/codec v1.1.7 // indirect
-	golang.org/x/exp v0.0.0-20220314205449-43aec2f8a4e7 // indirect
 	golang.org/x/net v0.0.0-20220127200216-cd36cc0744dd // indirect
 	golang.org/x/sys v0.0.0-20211216021012-1d35b9e2eb4e // indirect
 	golang.org/x/text v0.3.7 // indirect
